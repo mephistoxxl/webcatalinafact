@@ -1,10 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-
-type Props = {
-  whatsappNumberIntl: string;
-};
+import { useState } from 'react';
 
 type FormValues = {
   ruc: string;
@@ -36,38 +32,54 @@ function validate(values: FormValues): FormErrors {
   return errors;
 }
 
-export function ContactForm({ whatsappNumberIntl }: Props) {
+export function ContactForm() {
   const [values, setValues] = useState<FormValues>({ ruc: '', email: '', phone: '' });
   const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState(false);
-
-  const whatsappHref = useMemo(() => {
-    const messageLines = [
-      'Hola Catalina Facturador, quiero información y una demo.',
-      '',
-      `RUC: ${values.ruc.trim() || '-'}`,
-      `Correo: ${values.email.trim() || '-'}`,
-      `Teléfono: ${values.phone.trim() || '-'}`,
-    ];
-
-    const text = encodeURIComponent(messageLines.join('\n'));
-    return `https://wa.me/${whatsappNumberIntl}?text=${text}`;
-  }, [values, whatsappNumberIntl]);
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [statusMessage, setStatusMessage] = useState('');
 
   function onChange<K extends keyof FormValues>(key: K, next: string) {
-    setSubmitted(false);
+    setStatus('idle');
+    setStatusMessage('');
     setErrors((prev) => ({ ...prev, [key]: undefined }));
     setValues((prev) => ({ ...prev, [key]: next }));
   }
 
-  function onSubmit(e: React.FormEvent) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     const nextErrors = validate(values);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    setSubmitted(true);
-    window.open(whatsappHref, '_blank', 'noopener,noreferrer');
+    setStatus('sending');
+    setStatusMessage('');
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ruc: values.ruc.trim(),
+          email: values.email.trim(),
+          phone: values.phone.trim(),
+        }),
+      });
+
+      if (!response.ok) {
+        const data = (await response.json().catch(() => null)) as
+          | { error?: string }
+          | null;
+        throw new Error(data?.error || 'No se pudo enviar el mensaje.');
+      }
+
+      setStatus('sent');
+      setStatusMessage('Enviado. Te contactamos por correo.');
+    } catch (err) {
+      setStatus('error');
+      setStatusMessage(
+        err instanceof Error ? err.message : 'No se pudo enviar el mensaje.',
+      );
+    }
   }
 
   const baseInputClass =
@@ -129,17 +141,21 @@ export function ContactForm({ whatsappNumberIntl }: Props) {
 
       <button
         type="submit"
+        disabled={status === 'sending'}
         className="mt-1 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-white/90"
       >
-        Enviar
+        {status === 'sending' ? 'Enviando...' : 'Enviar'}
       </button>
 
       <div className="text-xs text-white/50">
-        Al enviar, abrimos WhatsApp con tus datos.
+        Al enviar, recibimos tus datos en nuestro correo.
       </div>
 
-      {submitted ? (
-        <div className="text-xs font-semibold text-brand">Enviado. Revisa WhatsApp.</div>
+      {status === 'sent' ? (
+        <div className="text-xs font-semibold text-brand">{statusMessage}</div>
+      ) : null}
+      {status === 'error' ? (
+        <div className="text-xs font-semibold text-red-300">{statusMessage}</div>
       ) : null}
     </form>
   );

@@ -7,9 +7,9 @@ import { ContactForm } from "@/components/ContactForm";
 
 const benefits = [
   {
-    title: "Facturación sin límites",
+    title: "Facturación precisa",
     description:
-      "Emite los comprobantes que necesites, sin restricciones escondidas ni cobros extra por volumen.",
+      "Emite lo que necesitas. Sin restricciones, sin sorpresas ni cobros ocultos.",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
         <path
@@ -30,7 +30,7 @@ const benefits = [
   {
     title: "Fácil de usar",
     description:
-      "Interfaz clara e intuitiva para facturar en segundos y capacitar al equipo en minutos.",
+      "Aprendes rápido y facturas en minutos desde cualquier dispositivo.",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
         <path
@@ -45,7 +45,7 @@ const benefits = [
   {
     title: "Cumple con SRI",
     description:
-      "Genera documentos con los requisitos del SRI y mantén tu operación alineada a la normativa.",
+      "Documentos correctos y envío al SRI para autorización.",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
         <path
@@ -67,7 +67,7 @@ const benefits = [
   {
     title: "En la nube",
     description:
-      "Accede desde tu laptop o celular cuando lo necesites, estés donde estés, sin instalaciones complicadas.",
+      "Sistema web de facturación en la nube para Ecuador.",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
         <path
@@ -82,7 +82,7 @@ const benefits = [
   {
     title: "Soporte real",
     description:
-      "Atención humana en español para resolver dudas y acompañarte en el uso diario.",
+      "Soporte humano en español para dudas y configuración.",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
         <path
@@ -110,7 +110,7 @@ const benefits = [
   {
     title: "Emisión instantánea",
     description:
-      "Crea y envía tus facturas rápidamente, con un flujo ágil para no detener tus ventas.",
+      "Emites y envías al momento, sin demoras.",
     icon: (
       <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
         <path
@@ -180,7 +180,7 @@ const pricing = [
 const extraOption = {
   name: "Opción Extra",
   description: "Casos muy especiales (máximo 3 facturas al mes).",
-  price: "$6,99",
+  price: "$4,99",
   note: "+ IVA · anual",
   limit: "Necesarias dentro del rango",
 };
@@ -194,7 +194,7 @@ const loginHref = "https://www.catalinasoft-ec.com/inventario/login";
 const faqs = [
   {
     q: "¿Qué es Catalina Facturador y cómo funciona?",
-    a: "Es un sistema de facturación e inventario en línea. Configuras tu negocio, creas clientes y productos, y emites documentos en pocos pasos desde cualquier dispositivo.",
+    a: "Es un sistema de facturación en línea. Configuras tu negocio, creas clientes y productos, y emites documentos en pocos pasos desde cualquier dispositivo.",
   },
   {
     q: "¿Cumple con todos los requerimientos del SRI?",
@@ -228,6 +228,12 @@ export default function Home() {
             <span className="sr-only">Catalina Facturador</span>
           </a>
           <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
+            <a className="hover:text-white" href="/que-es-facturacion-electronica">
+              Qué es
+            </a>
+            <a className="hover:text-white" href="/cumplimiento-sri">
+              Cumplimiento SRI
+            </a>
             <a className="hover:text-white" href="#beneficios">
               Beneficios
             </a>
@@ -295,16 +301,19 @@ export default function Home() {
 
               <FadeIn delay={0.06}>
                 <h1 className="mt-5 text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl">
-                  Factura más rápido.
-                  <span className="block text-white/70">Cobra mejor. Controla todo.</span>
+                  Facturación electrónica sin complicaciones.
+                  <span className="block text-white/70">
+                    Sin restricciones. Sin complicaciones.
+                  </span>
                 </h1>
               </FadeIn>
 
               <FadeIn delay={0.12}>
                 <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-white/70">
-                  Un sistema de facturación con una experiencia rápida y clara: clientes,
-                  documentos, impuestos, cobros y reportes. Diseñado para vender y operar
-                  sin fricción.
+                  Sistema web de facturación en línea para Ecuador. Emite factura
+                  electrónica SRI, envía comprobantes, valida datos y guarda historial.
+                  Genera XML, RIDE y clave de acceso con trazabilidad para reportes y
+                  control de pagos. Ideal para pymes, tiendas y servicios profesionales.
                 </p>
               </FadeIn>
 
@@ -344,6 +353,80 @@ export default function Home() {
                 </div>
               </FadeIn>
             </div>
+          </div>
+        </section>
+
+        <section id="que-es" className="mx-auto w-full max-w-6xl px-5 py-16">
+          <FadeIn>
+            <div className="text-xs font-semibold text-white/60">Guía rápida</div>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+              ¿Qué es la facturación electrónica?
+            </h2>
+          </FadeIn>
+
+          <div className="mt-8 grid gap-8 md:grid-cols-[1.3fr_1fr]">
+            <FadeIn delay={0.05} className="h-full">
+              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
+                <p className="text-sm leading-6 text-white/70">
+                  La facturación electrónica es la emisión de comprobantes digitales con
+                  validez tributaria. El sistema genera el comprobante, crea el XML,
+                  produce el RIDE y lo envía al SRI para autorización.
+                </p>
+                <p className="mt-3 text-sm leading-6 text-white/70">
+                  Incluye clave de acceso, validación y respaldo digital del comprobante.
+                  Todo queda guardado con historial de ventas.
+                </p>
+                <ul className="mt-4 space-y-2 text-sm text-white/70">
+                  <li className="flex items-start gap-2">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    Emisión con numeración controlada.
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    Envío inmediato al SRI y respaldo digital.
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    Reportes listos para decidir.
+                  </li>
+                </ul>
+                <div className="mt-4 text-sm text-white/70">
+                  Comprobantes electrónicos comunes: factura, nota de crédito, nota de
+                  débito, comprobante de retención, guía de remisión y liquidación de
+                  compra.
+                </div>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <MagneticButton href="/que-es-facturacion-electronica" variant="secondary">
+                    Leer guia completa
+                  </MagneticButton>
+                  <MagneticButton href="#contacto">Solicitar demo</MagneticButton>
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.1}>
+              <div className="rounded-3xl border border-white/10 bg-black/40 p-6">
+                <div className="text-sm font-semibold">Para quién es</div>
+                <p className="mt-2 text-sm leading-6 text-white/70">
+                  Emprendedores y PYMES que quieren cumplir sin perder tiempo.
+                </p>
+                <div className="mt-4 text-sm text-white/70">
+                  Tiendas, minimarket, ferreterías, restaurantes y servicios
+                  profesionales. Equipos con roles y sucursales.
+                </div>
+                <div className="mt-3 text-sm text-white/70">
+                  También para negocios con procesos de venta simples.
+                </div>
+                <div className="mt-6">
+                  <a
+                    className="text-sm font-semibold text-white/80 hover:text-white"
+                    href="/cumplimiento-sri"
+                  >
+                    Ver cambios SRI 2026
+                  </a>
+                </div>
+              </div>
+            </FadeIn>
           </div>
         </section>
 
@@ -429,11 +512,11 @@ export default function Home() {
               <div>
                 <div className="text-xs font-semibold text-white/60">Beneficios</div>
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
-                  Diseñado para vender, cobrar y crecer
+                  Factura, cobra y sigue
                 </h2>
               </div>
               <div className="hidden text-sm text-white/60 md:block">
-                Menos tiempo en administración, más tiempo en negocio.
+                Menos admin. Más negocio.
               </div>
             </div>
           </FadeIn>
@@ -448,9 +531,7 @@ export default function Home() {
                     </div>
                     <div className="text-sm font-semibold">{b.title}</div>
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-white/70">
-                    {b.description}
-                  </p>
+                  <p className="mt-2 text-sm leading-6 text-white/70">{b.description}</p>
                 </div>
               </FadeIn>
             ))}
@@ -462,15 +543,33 @@ export default function Home() {
             <FadeIn>
               <div className="text-xs font-semibold text-white/60">Funciones</div>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
-                Todo lo que necesitas para facturar profesional
+                Lo esencial para facturar
               </h2>
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70">
+                Sistema web de facturación con clientes y productos, reportes y control de
+                cobros. Listo para operar y cumplir con el SRI.
+              </p>
+              <ul className="mt-4 space-y-2 text-sm text-white/70">
+                <li className="flex items-start gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                  Control de impuestos, totales y datos fiscales.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                  Emisión y autorización de comprobantes en línea.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                  Reportes para ventas, cobros y estados.
+                </li>
+              </ul>
             </FadeIn>
 
             <div className="mt-10 grid gap-4 md:grid-cols-3">
               {[
                 {
                   title: "Clientes y productos",
-                  text: "Historial, listas de precios, impuestos por ítem y búsqueda rápida.",
+                  text: "Clientes, productos, impuestos y búsqueda rápida.",
                   icon: (
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                       <path
@@ -496,7 +595,7 @@ export default function Home() {
                 },
                 {
                   title: "Series y numeración",
-                  text: "Control por sucursal/usuario, prefijos y reglas claras para auditoría.",
+                  text: "Series claras por usuario o sucursal para auditoría.",
                   icon: (
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                       <path
@@ -516,7 +615,7 @@ export default function Home() {
                 },
                 {
                   title: "Pagos y vencimientos",
-                  text: "Estados, parciales, notas y recordatorios para mejorar cobranza.",
+                  text: "Estados y vencimientos para cobrar a tiempo.",
                   icon: (
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                       <path
@@ -544,7 +643,7 @@ export default function Home() {
                 },
                 {
                   title: "Reportes en tiempo real",
-                  text: "Filtra por fechas, cliente, estado y exporta para contabilidad.",
+                  text: "Reportes por fecha, cliente y estado.",
                   icon: (
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                       <path
@@ -570,7 +669,7 @@ export default function Home() {
                 },
                 {
                   title: "Roles y permisos",
-                  text: "Define quién puede ver/editar. Ideal para equipos y crecimiento.",
+                  text: "Roles claros para equipos.",
                   icon: (
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                       <path
@@ -590,7 +689,7 @@ export default function Home() {
                 },
                 {
                   title: "Integraciones",
-                  text: "Conecta con email, CRM, contabilidad o pasarelas (según tu país).",
+                  text: "Integraciones cuando las necesitas.",
                   icon: (
                     <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" className="h-5 w-5">
                       <path
@@ -627,6 +726,82 @@ export default function Home() {
           </div>
         </section>
 
+        <section id="sri-2026" className="mx-auto w-full max-w-6xl px-5 py-16">
+          <FadeIn>
+            <div className="text-xs font-semibold text-white/60">Actualización SRI</div>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+              Cambios clave 2026
+            </h2>
+          </FadeIn>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            <FadeIn delay={0.05}>
+              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
+                <div className="text-sm font-semibold">Transmisión inmediata</div>
+                <p className="mt-2 text-sm leading-6 text-white/70">
+                  Sin plazo extra: se envía al momento de emitir para autorización de
+                  comprobantes electrónicos SRI.
+                </p>
+                <p className="mt-3 text-sm leading-6 text-white/70">
+                  Antes existía un margen para transmitir después de generar el
+                  comprobante. Desde 2026, ese margen se elimina y la emisión debe ir
+                  acompañada de envío inmediato del XML.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.1} className="h-full">
+              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
+                <div className="text-sm font-semibold">Consumidor final</div>
+                <p className="mt-2 text-sm leading-6 text-white/70">
+                  No se anula ni se hace nota de crédito.
+                </p>
+                <p className="mt-3 text-sm leading-6 text-white/70">
+                  Una vez emitida y transmitida la factura con la leyenda "consumidor
+                  final", no procede anulación ni nota de crédito. Por eso es clave
+                  validar datos antes de emitir.
+                </p>
+              </div>
+            </FadeIn>
+            <FadeIn delay={0.15} className="h-full">
+              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
+                <div className="text-sm font-semibold">Impacto operativo</div>
+                <ul className="mt-3 space-y-2 text-sm text-white/70">
+                  <li className="flex items-start gap-2">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    Validación previa para evitar rechazos del SRI.
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    Envío inmediato del XML y respaldo del RIDE.
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    Control más estricto en consumidor final.
+                  </li>
+                </ul>
+              </div>
+            </FadeIn>
+          </div>
+
+          <FadeIn delay={0.2}>
+            <div className="mt-8 rounded-3xl border border-white/10 bg-black/40 p-6">
+              <div className="text-sm font-semibold">Resumen rápido</div>
+              <p className="mt-2 text-sm leading-6 text-white/70">
+                Qué implica: emites y transmites de inmediato, evitas anulaciones de
+                consumidor final y mantienes el historial correcto.
+              </p>
+              <p className="mt-3 text-sm leading-6 text-white/70">
+                En la práctica, el sistema debe validar datos, generar XML y enviar al SRI
+                sin demoras. También debe asegurar que el comprobante de consumidor final
+                sea correcto desde el primer intento.
+              </p>
+              <div className="mt-4 text-sm text-white/60">
+                Para casos especiales, revisa la resolución SRI vigente.
+              </div>
+            </div>
+          </FadeIn>
+        </section>
+
         <section id="faq" className="border-t border-white/10 bg-white/[0.03]">
           <div className="mx-auto w-full max-w-6xl px-5 py-16">
             <FadeIn>
@@ -649,10 +824,10 @@ export default function Home() {
                 <div>
                   <div className="text-xs font-semibold text-white/60">Contacto</div>
                   <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
-                    ¿Listo para vender tu sistema con estilo?
+                    ¿Listo para facturar sin errores?
                   </h2>
                   <p className="mt-3 text-sm leading-6 text-white/70">
-                    Deja tus datos y te ayudamos a adaptar la demo a tu rubro.
+                    Deja tus datos y vemos tu caso.
                   </p>
                 </div>
 
@@ -663,21 +838,9 @@ export default function Home() {
                   </p>
 
                   <div className="mt-4 grid gap-3">
-                    <ContactForm whatsappNumberIntl={whatsappNumberIntl} />
+                    <ContactForm />
 
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                      <a className="text-sm font-semibold text-white/80 hover:text-white" href="#precios">
-                        Ver planes
-                      </a>
-                      <a
-                        className="text-sm font-semibold text-white/80 hover:text-white"
-                        href={loginHref}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Iniciar sesión
-                      </a>
-                    </div>
+                    <div />
                   </div>
                 </div>
               </div>
@@ -690,6 +853,12 @@ export default function Home() {
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-5 py-10 text-sm text-white/60 md:flex-row md:items-center md:justify-between">
           <div>© {new Date().getFullYear()} Catalina Facturador</div>
           <div className="flex gap-4">
+            <a className="hover:text-white" href="/que-es-facturacion-electronica">
+              Qué es
+            </a>
+            <a className="hover:text-white" href="/cumplimiento-sri">
+              Cumplimiento SRI
+            </a>
             <a className="hover:text-white" href="#beneficios">
               Beneficios
             </a>

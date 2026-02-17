@@ -23,7 +23,7 @@ export function BrandLogo({
   height = 44,
   cropPng = true,
 }: Props) {
-  const [src, setSrc] = React.useState('/catalina-logo.svg');
+  const [src, setSrc] = React.useState('/catalina-logo.png');
 
   React.useEffect(() => {
     let cancelled = false;
@@ -38,7 +38,7 @@ export function BrandLogo({
         await img.decode();
       } catch {
         // If PNG doesn't exist or can't decode, stay on SVG fallback.
-        if (!cancelled) setSrc('/catalina-logo.svg');
+        if (!cancelled) setSrc('/catalina-logo.png');
         return;
       }
 
