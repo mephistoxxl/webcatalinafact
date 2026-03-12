@@ -21,8 +21,8 @@ const pricing = [
     name: "Plan Micro",
     price: "$9,99",
     note: "+ IVA · anual",
+    limit: "65 documentos",
     features: [
-      "Límite: 65 documentos",
       "Clientes y productos",
       "PDF + envío por email",
       "Soporte estándar",
@@ -32,8 +32,8 @@ const pricing = [
     name: "Plan Básico",
     price: "$14,99",
     note: "+ IVA · anual",
+    limit: "100 documentos",
     features: [
-      "Límite: 100 documentos",
       "Clientes y productos",
       "PDF + envío por email",
       "Soporte estándar",
@@ -43,8 +43,8 @@ const pricing = [
     name: "Plan Emprendedor",
     price: "$25,99",
     note: "+ IVA · anual",
+    limit: "150 documentos",
     features: [
-      "Límite: 150 documentos",
       "Clientes y productos",
       "PDF + envío por email",
       "Soporte estándar",
@@ -101,11 +101,21 @@ export default function Precios() {
 
         <section className="mt-10 grid gap-4 md:grid-cols-3">
           {pricing.map((p) => (
-            <div key={p.name} className="rounded-3xl border border-white/10 bg-white/5 p-6">
-              <div className="text-sm font-semibold">{p.name}</div>
-              <div className="mt-3 text-3xl font-semibold tracking-tight">{p.price}</div>
-              <div className="mt-1 text-sm text-white/60">{p.note}</div>
-              <ul className="mt-5 space-y-2 text-sm text-white/70">
+            <div key={p.name} className="flex flex-col rounded-3xl border border-white/10 bg-white/5 p-6 transition-colors hover:bg-white/10">
+              <div className="text-sm font-semibold text-white/80">{p.name}</div>
+              <div className="mt-3 text-4xl font-semibold tracking-tight">{p.price}</div>
+              <div className="mt-1 text-sm text-white/50">{p.note}</div>
+              
+              <div className="mt-6 mb-2 rounded-2xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 p-4 text-center shadow-[0_0_15px_rgba(99,102,241,0.1)]">
+                <div className="text-4xl font-bold bg-gradient-to-r from-indigo-300 to-purple-300 bg-clip-text text-transparent">
+                  {p.limit.split(' ')[0]}
+                </div>
+                <div className="mt-1 text-xs font-semibold uppercase tracking-widest text-indigo-300/80">
+                  {p.limit.split(' ').slice(1).join(' ')} al año
+                </div>
+              </div>
+
+              <ul className="mt-5 mb-8 flex-1 space-y-3 text-sm text-white/70">
                 {p.features.map((f) => (
                   <li key={f} className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full bg-white/60" />
@@ -113,7 +123,7 @@ export default function Precios() {
                   </li>
                 ))}
               </ul>
-              <div className="mt-6">
+              <div className="mt-auto flex w-full justify-center">
                 <MagneticButton href={whatsappHref} target="_blank" rel="noopener noreferrer">
                   Elegir plan
                 </MagneticButton>

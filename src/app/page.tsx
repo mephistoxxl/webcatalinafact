@@ -143,8 +143,8 @@ const pricing = [
     name: "Plan Micro",
     price: "$9,99",
     note: "+ IVA · anual",
+    limit: "65 documentos",
     features: [
-      "Límite: 65 documentos",
       "Clientes y productos",
       "PDF + envío por email",
       "Soporte estándar",
@@ -155,20 +155,20 @@ const pricing = [
     name: "Plan Básico",
     price: "$14,99",
     note: "+ IVA · anual",
+    limit: "100 documentos",
     features: [
-      "Límite: 100 documentos",
       "Clientes y productos",
       "PDF + envío por email",
       "Soporte estándar",
     ],
-    highlight: false,
+    highlight: true,
   },
   {
     name: "Plan Emprendedor",
     price: "$25,99",
     note: "+ IVA · anual",
+    limit: "150 documentos",
     features: [
-      "Límite: 150 documentos",
       "Clientes y productos",
       "PDF + envío por email",
       "Soporte estándar",
@@ -437,39 +437,71 @@ export default function Home() {
               <FadeIn key={p.name} delay={0.04 * idx}>
                 <div
                   className={[
-                    "rounded-3xl border p-6",
+                    "relative flex h-full flex-col overflow-hidden rounded-[2rem] border p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_0_40px_-15px_rgba(255,255,255,0.15)]",
                     p.highlight
-                      ? "border-white/20 bg-white/10"
-                      : "border-white/10 bg-white/5",
+                      ? "border-brand/40 bg-white/5 ring-1 ring-inset ring-brand/10 shadow-[0_0_80px_-20px_rgba(var(--brand),0.3)]"
+                      : "border-white/10 bg-[#0A0A0A]",
                   ].join(" ")}
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="text-sm font-semibold">{p.name}</div>
-                      <div className="mt-3 text-3xl font-semibold tracking-tight">
-                        {p.price}
+                  {p.highlight && (
+                    <>
+                      <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-brand/20 blur-3xl" />
+                      <div className="absolute right-0 top-0 rounded-bl-2xl bg-brand/20 border-b border-l border-brand/30 px-3 py-1 mt-0 mr-0">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-brand">Popular</span>
                       </div>
-                      <div className="mt-1 text-sm text-white/60">{p.note}</div>
+                    </>
+                  )}
+
+                  <div className="relative z-10 flex flex-col flex-1">
+                    <div className="text-xs font-semibold text-white/50 uppercase tracking-widest">{p.name}</div>
+                    <div className="mt-4 flex items-baseline gap-1">
+                      <span className="text-5xl font-semibold tracking-tighter text-white">{p.price.split(',')[0]}</span>
+                      <span className="text-2xl font-semibold text-white/70">,{p.price.split(',')[1]}</span>
                     </div>
-                  </div>
+                    <div className="mt-2 text-sm text-white/40">{p.note}</div>
+                    
+                    {/* The premium document limit section */}
+                    <div className="mt-8 mb-6 relative rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.08] to-transparent p-5 overflow-hidden group">
+                      <div className="absolute inset-0 bg-brand/[0.03] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      
+                      <div className="relative z-10 flex items-center gap-4">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] group-hover:ring-brand/30 group-hover:bg-brand/10 transition-colors duration-500">
+                          <svg className="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="flex items-end gap-1.5 leading-none">
+                            <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-white to-white/60 tracking-tight">{p.limit.split(' ')[0]}</span>
+                            <span className="text-[11px] pb-1 font-bold uppercase tracking-widest text-brand mb-[2px]">Docs</span>
+                          </div>
+                          <div className="mt-1 text-[11px] font-medium text-white/40 uppercase tracking-wider">Incluidos al año</div>
+                        </div>
+                      </div>
+                    </div>
 
-                  <ul className="mt-6 space-y-2 text-sm text-white/70">
-                    {p.features.map((f) => (
-                      <li key={f} className="flex items-center gap-2">
-                        <span className="h-1.5 w-1.5 rounded-full bg-white/60" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
+                    <ul className="mt-4 flex-1 space-y-4 text-sm text-white/70">
+                      {p.features.map((f) => (
+                        <li key={f} className="flex items-start gap-3">
+                          <div className="mt-0.5 rounded-full bg-brand/20 p-0.5">
+                            <svg className="h-3 w-3 shrink-0 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <span className="leading-tight">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
 
-                  <div className="mt-8">
-                    <MagneticButton
-                      href="#contacto"
-                      variant={"secondary"}
-                      className="w-full"
-                    >
-                      Empezar
-                    </MagneticButton>
+                    <div className="mt-8 pt-4 border-t border-white/5">
+                      <MagneticButton
+                        href="#contacto"
+                        variant={p.highlight ? "primary" : "secondary"}
+                        className="w-full justify-center"
+                      >
+                        Elegir plan
+                      </MagneticButton>
+                    </div>
                   </div>
                 </div>
               </FadeIn>
