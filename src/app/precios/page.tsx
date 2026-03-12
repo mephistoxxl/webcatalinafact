@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 const pricing = [
   {
     name: "Plan Micro",
-    price: "$8,99",
+    price: "$9,99",
     note: "+ IVA · anual",
     features: [
       "Límite: 65 documentos",
@@ -30,7 +30,7 @@ const pricing = [
   },
   {
     name: "Plan Básico",
-    price: "$12,99",
+    price: "$14,99",
     note: "+ IVA · anual",
     features: [
       "Límite: 100 documentos",
@@ -41,7 +41,7 @@ const pricing = [
   },
   {
     name: "Plan Emprendedor",
-    price: "$15,99",
+    price: "$25,99",
     note: "+ IVA · anual",
     features: [
       "Límite: 150 documentos",
@@ -52,13 +52,7 @@ const pricing = [
   },
 ];
 
-const extraOption = {
-  name: "Opción Extra",
-  description: "Casos muy especiales (máximo 3 facturas al mes).",
-  price: "$6,99",
-  note: "+ IVA · anual",
-  limit: "Necesarias dentro del rango",
-};
+
 
 export default function Precios() {
   return (
@@ -166,26 +160,7 @@ export default function Precios() {
           </div>
         </section>
 
-        <section className="mt-10 rounded-3xl border border-white/10 bg-black/40 p-6">
-          <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-            <div>
-              <div className="text-sm font-semibold">{extraOption.name}</div>
-              <p className="mt-1 text-sm text-white/70">{extraOption.description}</p>
-              <div className="mt-3 text-xs text-white/60">
-                Límite documentos: {extraOption.limit}
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="text-right">
-                <div className="text-2xl font-semibold tracking-tight">{extraOption.price}</div>
-                <div className="text-sm text-white/60">{extraOption.note}</div>
-              </div>
-              <MagneticButton href={whatsappHref} target="_blank" rel="noopener noreferrer">
-                Consultar
-              </MagneticButton>
-            </div>
-          </div>
-        </section>
+
       </main>
     </div>
   );

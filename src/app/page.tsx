@@ -141,7 +141,7 @@ const benefits = [
 const pricing = [
   {
     name: "Plan Micro",
-    price: "$8,99",
+    price: "$9,99",
     note: "+ IVA · anual",
     features: [
       "Límite: 65 documentos",
@@ -153,7 +153,7 @@ const pricing = [
   },
   {
     name: "Plan Básico",
-    price: "$12,99",
+    price: "$14,99",
     note: "+ IVA · anual",
     features: [
       "Límite: 100 documentos",
@@ -165,7 +165,7 @@ const pricing = [
   },
   {
     name: "Plan Emprendedor",
-    price: "$15,99",
+    price: "$25,99",
     note: "+ IVA · anual",
     features: [
       "Límite: 150 documentos",
@@ -177,13 +177,7 @@ const pricing = [
   },
 ];
 
-const extraOption = {
-  name: "Opción Extra",
-  description: "Casos muy especiales (máximo 3 facturas al mes).",
-  price: "$4,99",
-  note: "+ IVA · anual",
-  limit: "Necesarias dentro del rango",
-};
+
 
 const whatsappNumberIntl = "593991116753";
 const whatsappMessage =
@@ -482,28 +476,7 @@ export default function Home() {
             ))}
           </div>
 
-          <FadeIn delay={0.12}>
-            <div className="mt-6 rounded-3xl border border-white/10 bg-black/40 p-6">
-              <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-                <div>
-                  <div className="text-sm font-semibold">{extraOption.name}</div>
-                  <p className="mt-1 text-sm text-white/70">{extraOption.description}</p>
-                  <div className="mt-3 text-xs text-white/60">
-                    Límite documentos: {extraOption.limit}
-                  </div>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <div className="text-2xl font-semibold tracking-tight">{extraOption.price}</div>
-                    <div className="text-sm text-white/60">{extraOption.note}</div>
-                  </div>
-                  <MagneticButton href="#contacto" variant="secondary">
-                    Consultar
-                  </MagneticButton>
-                </div>
-              </div>
-            </div>
-          </FadeIn>
+
         </section>
 
         <section id="beneficios" className="mx-auto w-full max-w-6xl px-5 py-16">
