@@ -6,6 +6,7 @@ type FormValues = {
   ruc: string;
   email: string;
   phone: string;
+  plan: string;
 };
 
 type FormErrors = Partial<Record<keyof FormValues, string>>;
@@ -29,11 +30,13 @@ function validate(values: FormValues): FormErrors {
   if (!phoneDigits) errors.phone = 'Ingresa tu teléfono.';
   else if (phoneDigits.length < 7) errors.phone = 'Ingresa un teléfono válido.';
 
+  if (!values.plan) errors.plan = 'Selecciona un plan.';
+
   return errors;
 }
 
 export function ContactForm() {
-  const [values, setValues] = useState<FormValues>({ ruc: '', email: '', phone: '' });
+  const [values, setValues] = useState<FormValues>({ ruc: '', email: '', phone: '', plan: '' });
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
@@ -62,6 +65,7 @@ export function ContactForm() {
           ruc: values.ruc.trim(),
           email: values.email.trim(),
           phone: values.phone.trim(),
+          plan: values.plan,
         }),
       });
 
@@ -87,6 +91,25 @@ export function ContactForm() {
 
   return (
     <form onSubmit={onSubmit} className="grid gap-3">
+      <div>
+        <label className="text-xs font-semibold text-white/70" htmlFor="plan">
+          Plan en el que estás interesado
+        </label>
+        <select
+          id="plan"
+          name="plan"
+          className={baseInputClass}
+          value={values.plan}
+          onChange={(e) => onChange('plan', e.target.value)}
+        >
+          <option value="" disabled className="bg-[#0A0A0A] text-white/50">Selecciona un plan</option>
+          <option value="Micro" className="bg-[#0A0A0A]">Plan Micro</option>
+          <option value="Básico" className="bg-[#0A0A0A]">Plan Básico</option>
+          <option value="Emprendedor" className="bg-[#0A0A0A]">Plan Emprendedor</option>
+        </select>
+        {errors.plan ? <div className="mt-1 text-xs text-red-300">{errors.plan}</div> : null}
+      </div>
+
       <div>
         <label className="text-xs font-semibold text-white/70" htmlFor="ruc">
           RUC

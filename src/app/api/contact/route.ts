@@ -5,6 +5,7 @@ type Payload = {
   ruc?: string;
   email?: string;
   phone?: string;
+  plan?: string;
 };
 
 function normalizeDigits(value: string) {
@@ -44,6 +45,7 @@ export async function POST(req: Request) {
   const ruc = String(payload.ruc || "").trim();
   const email = String(payload.email || "").trim();
   const phone = String(payload.phone || "").trim();
+  const plan = String(payload.plan || "").trim();
 
   const rucDigits = normalizeDigits(ruc);
   const phoneDigits = normalizeDigits(phone);
@@ -56,6 +58,9 @@ export async function POST(req: Request) {
   }
   if (!phoneDigits || phoneDigits.length < 7) {
     return NextResponse.json({ error: "Telefono invalido." }, { status: 400 });
+  }
+  if (!plan) {
+    return NextResponse.json({ error: "Plan invalido." }, { status: 400 });
   }
 
   const host = process.env.ZEPTO_HOST as string;
@@ -80,6 +85,7 @@ export async function POST(req: Request) {
     text: [
       "Nuevo contacto desde la web:",
       "",
+      `Plan interesado: ${plan}`,
       `RUC: ${rucDigits}`,
       `Correo: ${email}`,
       `Telefono: ${phoneDigits}`,
