@@ -27,6 +27,57 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-* {
+/* scroll-behavior solo en <html>, no en todos los elementos */
+html {
   scroll-behavior: smooth;
 }
+
+/* Respetar preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   OPTIMIZACIONES MOBILE — las siguientes reglas resuelven el
+   jank en smartphones (especialmente Android gama media/alta)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /*
+   * backdrop-filter (blur del header y tarjetas glassmorphism)
+   * es el efecto CSS más lento en móvil. Lo sustituimos por un
+   * fondo sólido equivalente que no requiere compositing extra.
+   */
+  header {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    background-color: rgba(0, 0, 0, 0.92) !important;
+  }
+
+  /*
+   * Los divs decorativos con blur-3xl (filter: blur(64px)) son
+   * puramente visuales. En móvil fuerzan una capa de compositing
+   * por cada elemento, saturando la GPU. Los ocultamos.
+   */
+  .mobile-glow {
+    display: none !important;
+  }
+
+  /*
+   * Deshabilitar will-change global en móvil para no crear capas
+   * GPU innecesarias (cada will-change consume memoria de video).
+   */
+  * {
+    will-change: auto !important;
+  }
+
+  /*
+   * Simplificar sombras complejas en pricing cards — las 
+   * box-shadow con múltiples capas/blur grandes son lentas en móvil.
+   */
+  [class*="hover:shadow"] {
+    box-shadow: none !important;
+  }
+}
+

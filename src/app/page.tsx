@@ -263,7 +263,7 @@ export default function Home() {
 
       <main>
         <section className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0">
+          <div className="mobile-glow pointer-events-none absolute inset-0">
             <div className="absolute -top-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
             <div className="absolute -bottom-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-brand/15 blur-3xl" />
           </div>
@@ -445,7 +445,7 @@ export default function Home() {
                 >
                   {p.highlight && (
                     <>
-                      <div className="absolute -right-20 -top-20 h-40 w-40 rounded-full bg-brand/20 blur-3xl" />
+                      <div className="mobile-glow absolute -right-20 -top-20 h-40 w-40 rounded-full bg-brand/20 blur-3xl" />
                       <div className="absolute right-0 top-0 rounded-bl-2xl bg-brand/20 border-b border-l border-brand/30 px-3 py-1 mt-0 mr-0">
                         <span className="text-[10px] font-bold uppercase tracking-widest text-brand">Popular</span>
                       </div>

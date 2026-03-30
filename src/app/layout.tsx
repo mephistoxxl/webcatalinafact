@@ -5,11 +5,15 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",   // Muestra texto con fuente del sistema mientras descarga
+  preload: true,
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+  preload: false,    // Mono solo se usa en detalles, no vale la pena precargar
 });
 
 export const metadata: Metadata = {
@@ -90,6 +94,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
+      <head>
+        {/* Preconnect a los CDN de fuentes para reducir latencia TLS */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* DNS-prefetch como fallback para navegadores que no soportan preconnect */}
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

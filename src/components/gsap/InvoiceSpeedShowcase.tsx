@@ -13,8 +13,10 @@ export function InvoiceSpeedShowcase() {
   React.useEffect(() => {
     if (prefersReducedMotion()) return;
 
+    // Referencias para cleanup
     let ctx: { revert: () => void } | undefined;
-    let timeline: { kill?: () => void } | undefined;
+    let tl: { pause?: () => void; resume?: () => void; kill?: () => void } | undefined;
+    let visibilityObserver: IntersectionObserver | undefined;
 
     async function run() {
       const gsapModule = await import('gsap');
@@ -42,61 +44,40 @@ export function InvoiceSpeedShowcase() {
 
         const total = { v: 0 };
 
-        const tl = gsap.timeline({ repeat: -1, repeatDelay: 0.9 });
-        timeline = tl as unknown as { kill?: () => void };
+        const timeline = gsap.timeline({ repeat: -1, repeatDelay: 0.9 });
+        tl = timeline as unknown as { pause?: () => void; resume?: () => void; kill?: () => void };
 
-        // Pulse the badge and create speed streaks.
+        // Pulse badge
         if (badge) {
-          tl.to(
+          timeline.to(
             badge,
-            {
-              boxShadow: '0 0 0 6px rgba(34,197,94,0.12)',
-              duration: 0.25,
-              ease: 'power2.out',
-              yoyo: true,
-              repeat: 1,
-            },
+            { boxShadow: '0 0 0 6px rgba(34,197,94,0.12)', duration: 0.25, ease: 'power2.out', yoyo: true, repeat: 1 },
             0,
           );
         }
 
-        tl.to(
+        // Speed streaks
+        timeline.to(
           streaks,
-          {
-            xPercent: 120,
-            opacity: 0.28,
-            duration: 0.7,
-            stagger: 0.06,
-            ease: 'power2.out',
-          },
+          { xPercent: 120, opacity: 0.28, duration: 0.7, stagger: 0.06, ease: 'power2.out' },
           0,
-        ).to(
-          streaks,
-          {
-            opacity: 0,
-            duration: 0.25,
-            stagger: 0.04,
-            ease: 'power1.out',
-          },
-          0.45,
-        );
+        ).to(streaks, { opacity: 0, duration: 0.25, stagger: 0.04, ease: 'power1.out' }, 0.45);
 
         // Step 1: Cliente
-        tl.to(steps[0], { opacity: 1, duration: 0.2 }, 0)
+        timeline
+          .to(steps[0], { opacity: 1, duration: 0.2 }, 0)
           .to(reveal[0], { clipPath: 'inset(0 0% 0 0 round 10px)', duration: 0.55, ease: 'power3.out' }, 0.05);
-        if (progress) {
-          tl.to(progress, { scaleX: 0.35, duration: 0.35, ease: 'power2.out' }, 0.12);
-        }
+        if (progress) timeline.to(progress, { scaleX: 0.35, duration: 0.35, ease: 'power2.out' }, 0.12);
 
         // Step 2: Items
-        tl.to(steps[1], { opacity: 1, duration: 0.2 }, 0.55)
+        timeline
+          .to(steps[1], { opacity: 1, duration: 0.2 }, 0.55)
           .to(reveal[1], { clipPath: 'inset(0 0% 0 0 round 10px)', duration: 0.55, ease: 'power3.out' }, 0.62);
-        if (progress) {
-          tl.to(progress, { scaleX: 0.7, duration: 0.35, ease: 'power2.out' }, 0.72);
-        }
+        if (progress) timeline.to(progress, { scaleX: 0.7, duration: 0.35, ease: 'power2.out' }, 0.72);
 
         // Step 3: Total
-        tl.to(steps[2], { opacity: 1, duration: 0.2 }, 1.1)
+        timeline
+          .to(steps[2], { opacity: 1, duration: 0.2 }, 1.1)
           .to(reveal[2], { clipPath: 'inset(0 0% 0 0 round 10px)', duration: 0.55, ease: 'power3.out' }, 1.16)
           .to(
             total,
@@ -105,91 +86,71 @@ export function InvoiceSpeedShowcase() {
               duration: 0.5,
               ease: 'power2.out',
               onUpdate: () => {
-                if (!totalNum) return;
-                totalNum.textContent = total.v.toFixed(2);
+                if (totalNum) totalNum.textContent = total.v.toFixed(2);
               },
             },
             1.16,
           );
-        if (progress) {
-          tl.to(progress, { scaleX: 1, duration: 0.35, ease: 'power2.out' }, 1.28);
-        }
+        if (progress) timeline.to(progress, { scaleX: 1, duration: 0.35, ease: 'power2.out' }, 1.28);
 
         // Emitir
-        if (check) {
-          tl.to(check, { opacity: 1, scale: 1, rotate: 0, duration: 0.35, ease: 'back.out(1.8)' }, 1.62);
-        }
-        if (badge) {
-          tl.to(
-            badge,
-            {
-              filter: 'brightness(1.25)',
-              duration: 0.18,
-              yoyo: true,
-              repeat: 1,
-            },
-            1.62,
-          );
-        }
-        tl.to(
+        if (check) timeline.to(check, { opacity: 1, scale: 1, rotate: 0, duration: 0.35, ease: 'back.out(1.8)' }, 1.62);
+        if (badge) timeline.to(badge, { filter: 'brightness(1.25)', duration: 0.18, yoyo: true, repeat: 1 }, 1.62);
+        timeline.to(
           rootEl,
-          {
-            boxShadow: '0 0 0 1px rgba(34,197,94,0.35), 0 40px 90px rgba(0,0,0,0.6)',
-            duration: 0.35,
-            ease: 'power2.out',
-            yoyo: true,
-            repeat: 1,
-          },
+          { boxShadow: '0 0 0 1px rgba(34,197,94,0.35), 0 40px 90px rgba(0,0,0,0.6)', duration: 0.35, ease: 'power2.out', yoyo: true, repeat: 1 },
           1.62,
         );
 
-        // Reset for next loop
-        tl.to(
-          [reveal[0], reveal[1], reveal[2]],
-          {
-            clipPath: 'inset(0 100% 0 0 round 10px)',
-            duration: 0.45,
-            ease: 'power2.in',
-          },
-          2.4,
-        )
-          .to(
-            steps,
-            {
-              opacity: 0.35,
-              duration: 0.25,
-              ease: 'power2.out',
-            },
-            2.4,
-          )
+        // Reset loop
+        timeline
+          .to([reveal[0], reveal[1], reveal[2]], { clipPath: 'inset(0 100% 0 0 round 10px)', duration: 0.45, ease: 'power2.in' }, 2.4)
+          .to(steps, { opacity: 0.35, duration: 0.25, ease: 'power2.out' }, 2.4)
           .to(check ?? {}, { opacity: 0, scale: 0.6, duration: 0.2 }, 2.4)
           .to(progress ?? {}, { scaleX: 0, duration: 0.25, ease: 'power2.inOut' }, 2.4)
-          .to(
-            total,
-            {
-              v: 0,
-              duration: 0.01,
-              onUpdate: () => {
-                if (!totalNum) return;
-                totalNum.textContent = '0.00';
-              },
-            },
-            2.4,
-          );
+          .to(total, { v: 0, duration: 0.01, onUpdate: () => { if (totalNum) totalNum.textContent = '0.00'; } }, 2.4);
+
       }, rootRef);
+
+      // ─── CRÍTICO para móvil ───────────────────────────────────────────────
+      // Pausar la timeline cuando el componente sale del viewport y reanudar
+      // cuando vuelve. Sin esto, el GSAP corre a 60fps aunque el usuario
+      // haya hecho scroll a otra sección — destruyendo la batería en móvil.
+      if (rootRef.current) {
+        visibilityObserver = new IntersectionObserver(
+          ([entry]) => {
+            if (!tl) return;
+            if (entry.isIntersecting) tl.resume?.();
+            else tl.pause?.();
+          },
+          { threshold: 0.05 },
+        );
+        visibilityObserver.observe(rootRef.current);
+      }
     }
 
     run();
 
+    // Pausar también cuando el usuario cambia de pestaña
+    const handlePageVisibility = () => {
+      if (!tl) return;
+      if (document.hidden) tl.pause?.();
+      else tl.resume?.();
+    };
+    document.addEventListener('visibilitychange', handlePageVisibility);
+
     return () => {
-      if (timeline) timeline.kill?.();
-      if (ctx) ctx.revert();
+      visibilityObserver?.disconnect();
+      document.removeEventListener('visibilitychange', handlePageVisibility);
+      tl?.kill?.();
+      ctx?.revert();
     };
   }, []);
 
   return (
     <div ref={rootRef} className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-5">
-      <div className="pointer-events-none absolute inset-0">
+      {/* Decorative glows — ocultos en móvil (ver globals.css) */}
+      <div className="mobile-glow pointer-events-none absolute inset-0">
         <div className="absolute -top-24 left-1/2 h-48 w-[28rem] -translate-x-1/2 rounded-full bg-brand/15 blur-3xl" />
         <div className="absolute -bottom-24 left-1/2 h-48 w-[28rem] -translate-x-1/2 rounded-full bg-white/5 blur-3xl" />
       </div>

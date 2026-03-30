@@ -1,7 +1,6 @@
-  'use client';
+'use client';
 
 import * as React from 'react';
-import { motion, useMotionValue, useSpring } from 'motion/react';
 
 type Props = {
   href?: string;
@@ -12,6 +11,20 @@ type Props = {
   variant?: 'primary' | 'secondary';
 };
 
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black';
+
+const styleMap = {
+  primary: 'bg-white text-black hover:bg-white/90',
+  secondary: 'bg-white/10 text-white hover:bg-white/15 ring-1 ring-white/15',
+};
+
+/**
+ * MagneticButton — efecto magnético usando CSS transforms puros.
+ * No requiere Framer Motion en el bundle crítico.
+ * El cálculo de posición se hace con pointermove + requestAnimationFrame
+ * para no bloquear el main thread.
+ */
 export function MagneticButton({
   href,
   target,
@@ -20,49 +33,75 @@ export function MagneticButton({
   className,
   variant = 'primary',
 }: Props) {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+  const ref = React.useRef<HTMLElement>(null);
+  const rafId = React.useRef<number>(0);
+  const position = React.useRef({ x: 0, y: 0 });
+  const [pressed, setPressed] = React.useState(false);
 
-  const sx = useSpring(x, { stiffness: 220, damping: 18, mass: 0.5 });
-  const sy = useSpring(y, { stiffness: 220, damping: 18, mass: 0.5 });
+  const applyTransform = React.useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    const { x, y } = position.current;
+    el.style.transform = `translate(${x}px, ${y}px) scale(${pressed ? 0.98 : 1})`;
+  }, [pressed]);
 
-  const base =
-    'inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black';
+  const handlePointerMove = (e: React.PointerEvent) => {
+    // En touch el efecto magnético no se percibe y solo consume CPU — ignorar
+    if (e.pointerType === 'touch') return;
 
-  const styles =
-    variant === 'primary'
-      ? 'bg-white text-black hover:bg-white/90'
-      : 'bg-white/10 text-white hover:bg-white/15 ring-1 ring-white/15';
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const dx = (e.clientX - rect.left - rect.width / 2) * 0.12;
+    const dy = (e.clientY - rect.top - rect.height / 2) * 0.12;
+    position.current = { x: dx, y: dy };
 
-  const commonProps = {
-    whileTap: { scale: 0.98 },
-    whileHover: { scale: 1.02 },
-    onPointerMove: (e: React.PointerEvent) => {
-      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-      const dx = e.clientX - rect.left - rect.width / 2;
-      const dy = e.clientY - rect.top - rect.height / 2;
-      x.set(dx * 0.12);
-      y.set(dy * 0.12);
-    },
-    onPointerLeave: () => {
-      x.set(0);
-      y.set(0);
-    },
-    style: { x: sx, y: sy },
-    className: [base, styles, className].filter(Boolean).join(' '),
+    cancelAnimationFrame(rafId.current);
+    rafId.current = requestAnimationFrame(applyTransform);
+  };
+
+  const handlePointerLeave = (e: React.PointerEvent) => {
+    if (e.pointerType === 'touch') return;
+
+    position.current = { x: 0, y: 0 };
+    const el = ref.current;
+    if (el) {
+      el.style.transition = 'transform 0.35s cubic-bezier(0.22,1,0.36,1), background-color 0.15s ease';
+      el.style.transform = 'translate(0px, 0px) scale(1)';
+      setTimeout(() => {
+        if (el) el.style.transition = '';
+      }, 380);
+    }
+  };
+
+  const sharedProps = {
+    onPointerMove: handlePointerMove,
+    onPointerLeave: handlePointerLeave,
+    onPointerDown: () => setPressed(true),
+    onPointerUp: () => setPressed(false),
+    className: [base, styleMap[variant], className].filter(Boolean).join(' '),
+    style: { willChange: 'transform' } as React.CSSProperties,
   };
 
   if (href) {
     return (
-      <motion.a href={href} target={target} rel={rel} {...commonProps}>
+      <a
+        ref={ref as React.RefObject<HTMLAnchorElement>}
+        href={href}
+        target={target}
+        rel={rel}
+        {...sharedProps}
+      >
         {children}
-      </motion.a>
+      </a>
     );
   }
 
   return (
-    <motion.button type="button" {...commonProps}>
+    <button
+      ref={ref as React.RefObject<HTMLButtonElement>}
+      type="button"
+      {...sharedProps}
+    >
       {children}
-    </motion.button>
+    </button>
   );
 }
