@@ -30,47 +30,61 @@ html {
   html {
     scroll-behavior: auto;
   }
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────
-   OPTIMIZACIONES MOBILE — las siguientes reglas resuelven el
-   jank en smartphones (especialmente Android gama media/alta)
+   OPTIMIZACIONES MOBILE — reglas críticas para framerate fluido
+   en smartphones Android/iOS de cualquier gama.
    ───────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  /*
-   * backdrop-filter (blur del header y tarjetas glassmorphism)
-   * es el efecto CSS más lento en móvil. Lo sustituimos por un
-   * fondo sólido equivalente que no requiere compositing extra.
-   */
+@media (max-width: 767px) {
+
+  /* ① Eliminar backdrop-filter del header — el efecto blur fuerza
+   *    compositing en toda la pantalla a 60fps. Fondo sólido equivalente. */
   header {
     -webkit-backdrop-filter: none !important;
     backdrop-filter: none !important;
-    background-color: rgba(255, 255, 255, 0.97) !important;
+    background-color: rgba(255, 255, 255, 0.98) !important;
   }
 
-  /*
-   * Los divs decorativos con blur-3xl (filter: blur(64px)) son
-   * puramente visuales. En móvil fuerzan una capa de compositing
-   * por cada elemento, saturando la GPU. Los ocultamos.
-   */
-  .mobile-glow {
+  /* ② Ocultar todos los elementos decorativos con CSS blur/glow.
+   *    Cada filter:blur() en un div separado crea una capa GPU extra. */
+  .mobile-glow,
+  [class*="blur-"],
+  [class*="blur_"] {
     display: none !important;
   }
 
-  /*
-   * Deshabilitar will-change global en móvil para no crear capas
-   * GPU innecesarias (cada will-change consume memoria de video).
-   */
+  /* ③ Eliminar todos los filtros CSS en móvil — incluyendo
+   *    blur-[1px] en los streaks de velocidad. */
   * {
+    filter: none !important;
+    -webkit-filter: none !important;
+    /* Sin capas GPU innecesarias */
     will-change: auto !important;
+    /* Restringe el repaint a cada elemento de forma independiente */
+    contain: layout style;
   }
 
-  /*
-   * Simplificar sombras complejas en pricing cards — las 
-   * box-shadow con múltiples capas/blur grandes son lentas en móvil.
-   */
-  [class*="hover:shadow"] {
-    box-shadow: none !important;
+  /* ④ Sombras complejas → eliminadas en hover (no accesibles en touch) */
+  [class*="hover:shadow"],
+  [class*="shadow-["] {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08) !important;
+  }
+
+  /* ⑤ backdrop-filter en cualquier elemento (tarjetas glassmorphism) */
+  [class*="backdrop-blur"] {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+
+  /* ⑥ Gradientes con blur en pseudo-elementos decorativos */
+  [class*="from-transparent"][class*="blur"] {
+    display: none !important;
   }
 }
+
 
