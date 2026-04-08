@@ -87,12 +87,12 @@ export function ContactForm() {
   }
 
   const baseInputClass =
-    'mt-1 w-full rounded-xl bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/35 ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-brand/40';
+    'mt-1 w-full rounded-xl bg-white border border-gray-200 px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 ring-1 ring-gray-200 focus:outline-none focus:ring-2 focus:ring-brand/40 focus:border-brand/40';
 
   return (
     <form onSubmit={onSubmit} className="grid gap-3">
       <div>
-        <label className="text-xs font-semibold text-white/70" htmlFor="plan">
+        <label className="text-xs font-semibold text-gray-700" htmlFor="plan">
           Plan en el que estás interesado
         </label>
         <select
@@ -102,16 +102,16 @@ export function ContactForm() {
           value={values.plan}
           onChange={(e) => onChange('plan', e.target.value)}
         >
-          <option value="" disabled className="bg-[#0A0A0A] text-white/50">Selecciona un plan</option>
-          <option value="Micro" className="bg-[#0A0A0A]">Plan Micro</option>
-          <option value="Básico" className="bg-[#0A0A0A]">Plan Básico</option>
-          <option value="Emprendedor" className="bg-[#0A0A0A]">Plan Emprendedor</option>
+          <option value="" disabled className="bg-white text-gray-400">Selecciona un plan</option>
+          <option value="Micro" className="bg-white">Plan Micro</option>
+          <option value="Básico" className="bg-white">Plan Básico</option>
+          <option value="Emprendedor" className="bg-white">Plan Emprendedor</option>
         </select>
         {errors.plan ? <div className="mt-1 text-xs text-red-300">{errors.plan}</div> : null}
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-white/70" htmlFor="ruc">
+        <label className="text-xs font-semibold text-gray-700" htmlFor="ruc">
           RUC
         </label>
         <input
@@ -129,7 +129,7 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-white/70" htmlFor="email">
+        <label className="text-xs font-semibold text-gray-700" htmlFor="email">
           Correo (Gmail)
         </label>
         <input
@@ -146,7 +146,7 @@ export function ContactForm() {
       </div>
 
       <div>
-        <label className="text-xs font-semibold text-white/70" htmlFor="phone">
+        <label className="text-xs font-semibold text-gray-700" htmlFor="phone">
           Teléfono
         </label>
         <input
@@ -165,12 +165,12 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="mt-1 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black hover:bg-white/90"
+        className="mt-1 rounded-xl bg-brand px-4 py-3 text-sm font-semibold text-white hover:bg-green-700 transition-colors"
       >
         {status === 'sending' ? 'Enviando...' : 'Enviar'}
       </button>
 
-      <div className="text-xs text-white/50">
+      <div className="text-xs text-gray-500">
         Al enviar, recibimos tus datos en nuestro correo.
       </div>
 

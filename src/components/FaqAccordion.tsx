@@ -34,7 +34,7 @@ export function FaqAccordion({ items, defaultOpenIndex = 0 }: Props) {
 
         return (
           <FadeIn key={item.q} delay={0.03 * idx}>
-            <div className="group rounded-2xl border border-white/10 bg-white/5 p-5 transition-colors hover:bg-white/[0.07]">
+            <div className="group rounded-2xl border border-gray-200 bg-white p-5 transition-colors hover:bg-gray-50 shadow-sm">
               <button
                 type="button"
                 className="flex w-full items-center justify-between gap-4 text-left text-sm font-semibold"
@@ -48,7 +48,7 @@ export function FaqAccordion({ items, defaultOpenIndex = 0 }: Props) {
                   viewBox="0 0 20 20"
                   fill="none"
                   className={[
-                    'h-4 w-4 text-white/60 transition-transform duration-200',
+                    'h-4 w-4 text-gray-400 transition-transform duration-200',
                     isOpen ? 'rotate-180' : 'rotate-0',
                   ].join(' ')}
                 >
@@ -70,7 +70,7 @@ export function FaqAccordion({ items, defaultOpenIndex = 0 }: Props) {
                 ].join(' ')}
               >
                 <div className="overflow-hidden">
-                  <div className="pt-3 text-sm leading-6 text-white/70">{item.a}</div>
+                  <div className="pt-3 text-sm leading-6 text-gray-600">{item.a}</div>
                 </div>
               </div>
             </div>

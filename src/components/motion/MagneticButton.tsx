@@ -12,11 +12,11 @@ type Props = {
 };
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-black';
+  'inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-white';
 
 const styleMap = {
-  primary: 'bg-white text-black hover:bg-white/90',
-  secondary: 'bg-white/10 text-white hover:bg-white/15 ring-1 ring-white/15',
+  primary: 'bg-brand text-white hover:bg-green-700',
+  secondary: 'bg-white text-gray-700 hover:bg-gray-100 ring-1 ring-gray-300',
 };
 
 /**

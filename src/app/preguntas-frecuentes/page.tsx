@@ -58,24 +58,24 @@ const faqs = [
 
 export default function PreguntasFrecuentes() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <header className="border-b border-white/10 bg-black/70 backdrop-blur">
+    <div className="min-h-screen bg-white text-gray-900">
+      <header className="border-b border-gray-200 bg-white/90 backdrop-blur shadow-sm">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5">
           <a href="/" className="flex items-center gap-3 font-semibold tracking-tight">
             <BrandLogo className="h-14 w-auto" width={380} height={88} />
             <span className="sr-only">Catalina Facturador</span>
           </a>
-          <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
-            <a className="hover:text-white" href="/que-es-facturacion-electronica">
+          <nav className="hidden items-center gap-6 text-sm text-gray-600 md:flex">
+            <a className="hover:text-gray-900" href="/que-es-facturacion-electronica">
               Qué es
             </a>
-            <a className="hover:text-white" href="/cumplimiento-sri">
+            <a className="hover:text-gray-900" href="/cumplimiento-sri">
               Cumplimiento SRI
             </a>
-            <a className="hover:text-white" href="/beneficios">
+            <a className="hover:text-gray-900" href="/beneficios">
               Beneficios
             </a>
-            <a className="hover:text-white" href="/precios">
+            <a className="hover:text-gray-900" href="/precios">
               Precios
             </a>
           </nav>
@@ -87,17 +87,32 @@ export default function PreguntasFrecuentes() {
 
       <main className="mx-auto w-full max-w-6xl px-5 py-14">
         <div className="max-w-3xl">
-          <div className="text-xs font-semibold text-white/60">FAQ</div>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl">
+          <div className="text-xs font-semibold text-gray-500">FAQ</div>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight md:text-4xl text-gray-900">
             Preguntas frecuentes sobre el sistema de facturación
           </h1>
-          <p className="mt-4 text-sm leading-6 text-white/70">
+          <p className="mt-4 text-sm leading-6 text-gray-600">
             Resolvemos las dudas más comunes para que tomes una decisión informada.
           </p>
         </div>
 
-        <section className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-6">
+        <section className="mt-10 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
           <FaqAccordion items={faqs} />
+        </section>
+
+        <section className="mt-10 rounded-3xl border border-gray-200 bg-gradient-to-br from-green-50 to-white p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-gray-900">¿Tienes más preguntas?</h2>
+          <p className="mt-3 text-sm leading-6 text-gray-600">
+            Escríbenos por WhatsApp. Te respondemos en español y te ayudamos a elegir el plan correcto.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-3">
+            <MagneticButton href={whatsappHref} target="_blank" rel="noopener noreferrer">
+              Escribir por WhatsApp
+            </MagneticButton>
+            <MagneticButton href="/precios" variant="secondary">
+              Ver precios
+            </MagneticButton>
+          </div>
         </section>
       </main>
     </div>

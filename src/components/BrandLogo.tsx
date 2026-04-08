@@ -1,5 +1,5 @@
-'use client';
-
+// Server Component — no necesita 'use client'
+// next/image funciona perfectamente en el servidor
 import Image from 'next/image';
 
 type Props = {
@@ -9,12 +9,6 @@ type Props = {
   height?: number;
 };
 
-/**
- * Logo de la marca — usa next/image para que Next.js:
- *  1. Sirva el PNG como WebP/AVIF automáticamente
- *  2. Emita un <link rel="preload"> en el <head> cuando priority=true
- *  3. Evite el canvas-crop en cliente que retrasaba el LCP ~300-800ms
- */
 export function BrandLogo({
   className,
   alt = 'Catalina Facturador',

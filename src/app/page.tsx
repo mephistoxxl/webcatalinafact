@@ -1,9 +1,46 @@
+'use client';
+import dynamic from "next/dynamic";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { MagneticButton } from "@/components/motion/MagneticButton";
-import { InvoiceSpeedShowcase } from "@/components/gsap/InvoiceSpeedShowcase";
 import { BrandLogo } from "@/components/BrandLogo";
-import { FaqAccordion } from "@/components/FaqAccordion";
-import { ContactForm } from "@/components/ContactForm";
+
+// ─── Carga diferida (code-splitting) ─────────────────────────────────────────
+// Estos componentes están below-the-fold. Con dynamic() Next.js los separa en
+// chunks independientes que solo se descargan cuando el usuario llega a ellos.
+
+// GSAP (~70 KB gzip) — solo se carga cuando el componente entra en pantalla
+const InvoiceSpeedShowcase = dynamic(
+  () => import("@/components/gsap/InvoiceSpeedShowcase").then((m) => m.InvoiceSpeedShowcase),
+  {
+    ssr: false, // No hay que renderizar la animación en el servidor
+    loading: () => (
+      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 p-5 h-[340px] animate-pulse" />
+    ),
+  }
+);
+
+// FAQ accordion — solo se necesita cuando el usuario llega al final
+const FaqAccordion = dynamic(
+  () => import("@/components/FaqAccordion").then((m) => m.FaqAccordion),
+  { ssr: true } // Puede SSR para SEO de las preguntas
+);
+
+// Formulario de contacto — último elemento de la página
+const ContactForm = dynamic(
+  () => import("@/components/ContactForm").then((m) => m.ContactForm),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="grid gap-3 animate-pulse">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-10 rounded-xl bg-gray-100" />
+        ))}
+        <div className="h-12 rounded-xl bg-gray-200" />
+      </div>
+    ),
+  }
+);
+
 
 const benefits = [
   {
@@ -214,30 +251,30 @@ const faqs = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-black/60 backdrop-blur">
+    <div className="min-h-screen bg-white text-gray-900">
+      <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur shadow-sm">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 md:py-6">
           <a href="#" className="flex items-center gap-3 font-semibold tracking-tight">
             <BrandLogo className="h-16 w-auto md:h-20" width={420} height={96} />
             <span className="sr-only">Catalina Facturador</span>
           </a>
-          <nav className="hidden items-center gap-6 text-sm text-white/70 md:flex">
-            <a className="hover:text-white" href="/que-es-facturacion-electronica">
+          <nav className="hidden items-center gap-6 text-sm text-gray-600 md:flex">
+            <a className="hover:text-gray-900" href="/que-es-facturacion-electronica">
               Qué es
             </a>
-            <a className="hover:text-white" href="/cumplimiento-sri">
+            <a className="hover:text-gray-900" href="/cumplimiento-sri">
               Cumplimiento SRI
             </a>
-            <a className="hover:text-white" href="#beneficios">
+            <a className="hover:text-gray-900" href="#beneficios">
               Beneficios
             </a>
-            <a className="hover:text-white" href="#funciones">
+            <a className="hover:text-gray-900" href="#funciones">
               Funciones
             </a>
-            <a className="hover:text-white" href="#precios">
+            <a className="hover:text-gray-900" href="#precios">
               Precios
             </a>
-            <a className="hover:text-white" href="#faq">
+            <a className="hover:text-gray-900" href="#faq">
               FAQ
             </a>
           </nav>
@@ -246,7 +283,7 @@ export default function Home() {
               href={whatsappHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden rounded-full px-4 py-2 text-sm font-semibold text-white/80 ring-1 ring-white/15 hover:bg-white/5 md:inline-flex"
+              className="hidden rounded-full px-4 py-2 text-sm font-semibold text-gray-700 ring-1 ring-gray-300 hover:bg-gray-100 md:inline-flex"
             >
               Hablar con ventas
             </a>
@@ -264,14 +301,14 @@ export default function Home() {
       <main>
         <section className="relative overflow-hidden">
           <div className="mobile-glow pointer-events-none absolute inset-0">
-            <div className="absolute -top-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-white/10 blur-3xl" />
-            <div className="absolute -bottom-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-brand/15 blur-3xl" />
+            <div className="absolute -top-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-green-100/60 blur-3xl" />
+            <div className="absolute -bottom-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
           </div>
 
           <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 pb-16 pt-14 md:grid-cols-2 md:items-center md:pb-24 md:pt-20">
             <div>
               <FadeIn>
-                <div className="inline-flex items-center gap-2 rounded-full bg-black/40 px-4 py-2 text-xs font-semibold text-white/90 ring-1 ring-brand/25 shadow-[0_0_0_1px_rgba(34,197,94,0.10),0_18px_55px_rgba(0,0,0,0.55)] backdrop-blur">
+                <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-xs font-semibold text-gray-800 ring-1 ring-brand/30 shadow-sm">
                   <span className="grid h-5 w-5 place-items-center rounded-full bg-brand/15 ring-1 ring-brand/30">
                     <svg
                       aria-hidden="true"
@@ -294,16 +331,16 @@ export default function Home() {
               </FadeIn>
 
               <FadeIn delay={0.06}>
-                <h1 className="mt-5 text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl">
+                <h1 className="mt-5 text-balance text-4xl font-semibold leading-[1.05] tracking-tight md:text-5xl text-gray-900">
                   Facturación electrónica sin complicaciones.
-                  <span className="block text-white/70">
+                  <span className="block text-gray-500">
                     Sin restricciones. Sin complicaciones.
                   </span>
                 </h1>
               </FadeIn>
 
               <FadeIn delay={0.12}>
-                <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-white/70">
+                <p className="mt-5 max-w-xl text-pretty text-base leading-7 text-gray-600">
                   Sistema web de facturación en línea para Ecuador. Emite factura
                   electrónica SRI, envía comprobantes, valida datos y guarda historial.
                   Genera XML, RIDE y clave de acceso con trazabilidad para reportes y
@@ -326,22 +363,22 @@ export default function Home() {
             </div>
 
             <div className="relative">
-              <div className="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+              <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6">
                 <InvoiceSpeedShowcase />
               </div>
 
               <FadeIn delay={0.22}>
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-white/55 md:justify-start">
-                  <span className="rounded-full bg-white/5 px-3 py-1 ring-1 ring-white/10">
+                <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-gray-500 md:justify-start">
+                  <span className="rounded-full bg-gray-100 px-3 py-1 ring-1 ring-gray-200">
                     Facturas PDF
                   </span>
-                  <span className="rounded-full bg-white/5 px-3 py-1 ring-1 ring-white/10">
+                  <span className="rounded-full bg-gray-100 px-3 py-1 ring-1 ring-gray-200">
                     Control de pagos
                   </span>
-                  <span className="rounded-full bg-white/5 px-3 py-1 ring-1 ring-white/10">
+                  <span className="rounded-full bg-gray-100 px-3 py-1 ring-1 ring-gray-200">
                     Reportes
                   </span>
-                  <span className="rounded-full bg-white/5 px-3 py-1 ring-1 ring-white/10">
+                  <span className="rounded-full bg-gray-100 px-3 py-1 ring-1 ring-gray-200">
                     Multi-usuario
                   </span>
                 </div>
@@ -352,7 +389,7 @@ export default function Home() {
 
         <section id="que-es" className="mx-auto w-full max-w-6xl px-5 py-16">
           <FadeIn>
-            <div className="text-xs font-semibold text-white/60">Guía rápida</div>
+            <div className="text-xs font-semibold text-gray-500">Guía rápida</div>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
               ¿Qué es la facturación electrónica?
             </h2>
@@ -360,31 +397,31 @@ export default function Home() {
 
           <div className="mt-8 grid gap-8 md:grid-cols-[1.3fr_1fr]">
             <FadeIn delay={0.05} className="h-full">
-              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
-                <p className="text-sm leading-6 text-white/70">
+              <div className="flex h-full flex-col rounded-3xl border border-gray-200 bg-gray-50 p-6">
+                <p className="text-sm leading-6 text-gray-600">
                   La facturación electrónica es la emisión de comprobantes digitales con
                   validez tributaria. El sistema genera el comprobante, crea el XML,
                   produce el RIDE y lo envía al SRI para autorización.
                 </p>
-                <p className="mt-3 text-sm leading-6 text-white/70">
+                <p className="mt-3 text-sm leading-6 text-gray-600">
                   Incluye clave de acceso, validación y respaldo digital del comprobante.
                   Todo queda guardado con historial de ventas.
                 </p>
-                <ul className="mt-4 space-y-2 text-sm text-white/70">
+                <ul className="mt-4 space-y-2 text-sm text-gray-600">
                   <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                     Emisión con numeración controlada.
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                     Envío inmediato al SRI y respaldo digital.
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                     Reportes listos para decidir.
                   </li>
                 </ul>
-                <div className="mt-4 text-sm text-white/70">
+                <div className="mt-4 text-sm text-gray-600">
                   Comprobantes electrónicos comunes: factura, nota de crédito, nota de
                   débito, comprobante de retención, guía de remisión y liquidación de
                   compra.
@@ -399,21 +436,21 @@ export default function Home() {
             </FadeIn>
 
             <FadeIn delay={0.1}>
-              <div className="rounded-3xl border border-white/10 bg-black/40 p-6">
-                <div className="text-sm font-semibold">Para quién es</div>
-                <p className="mt-2 text-sm leading-6 text-white/70">
+              <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div className="text-sm font-semibold text-gray-900">Para quién es</div>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
                   Emprendedores y PYMES que quieren cumplir sin perder tiempo.
                 </p>
-                <div className="mt-4 text-sm text-white/70">
+                <div className="mt-4 text-sm text-gray-600">
                   Tiendas, minimarket, ferreterías, restaurantes y servicios
                   profesionales. Equipos con roles y sucursales.
                 </div>
-                <div className="mt-3 text-sm text-white/70">
+                <div className="mt-3 text-sm text-gray-600">
                   También para negocios con procesos de venta simples.
                 </div>
                 <div className="mt-6">
                   <a
-                    className="text-sm font-semibold text-white/80 hover:text-white"
+                    className="text-sm font-semibold text-brand hover:text-green-700"
                     href="/cumplimiento-sri"
                   >
                     Ver cambios SRI 2026
@@ -426,7 +463,7 @@ export default function Home() {
 
         <section id="precios" className="mx-auto w-full max-w-6xl px-5 py-16">
           <FadeIn>
-            <div className="text-xs font-semibold text-white/60">Precios</div>
+            <div className="text-xs font-semibold text-gray-500">Precios</div>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
               Planes simples. Valor real.
             </h2>
@@ -437,15 +474,15 @@ export default function Home() {
               <FadeIn key={p.name} delay={0.04 * idx}>
                 <div
                   className={[
-                    "relative flex h-full flex-col overflow-hidden rounded-[2rem] border p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_0_40px_-15px_rgba(255,255,255,0.15)]",
+                    "relative flex h-full flex-col overflow-hidden rounded-[2rem] border p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg",
                     p.highlight
-                      ? "border-brand/40 bg-white/5 ring-1 ring-inset ring-brand/10 shadow-[0_0_80px_-20px_rgba(var(--brand),0.3)]"
-                      : "border-white/10 bg-[#0A0A0A]",
+                      ? "border-brand/50 bg-green-50 ring-2 ring-inset ring-brand/20 shadow-md"
+                      : "border-gray-200 bg-white shadow-sm",
                   ].join(" ")}
                 >
                   {p.highlight && (
                     <>
-                      <div className="mobile-glow absolute -right-20 -top-20 h-40 w-40 rounded-full bg-brand/20 blur-3xl" />
+                      <div className="mobile-glow absolute -right-20 -top-20 h-40 w-40 rounded-full bg-brand/10 blur-3xl" />
                       <div className="absolute right-0 top-0 rounded-bl-2xl bg-brand/20 border-b border-l border-brand/30 px-3 py-1 mt-0 mr-0">
                         <span className="text-[10px] font-bold uppercase tracking-widest text-brand">Popular</span>
                       </div>
@@ -453,34 +490,34 @@ export default function Home() {
                   )}
 
                   <div className="relative z-10 flex flex-col flex-1">
-                    <div className="text-xs font-semibold text-white/50 uppercase tracking-widest">{p.name}</div>
+                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{p.name}</div>
                     <div className="mt-4 flex items-baseline gap-1">
-                      <span className="text-5xl font-semibold tracking-tighter text-white">{p.price.split(',')[0]}</span>
-                      <span className="text-2xl font-semibold text-white/70">,{p.price.split(',')[1]}</span>
+                      <span className="text-5xl font-semibold tracking-tighter text-gray-900">{p.price.split(',')[0]}</span>
+                      <span className="text-2xl font-semibold text-gray-500">,{p.price.split(',')[1]}</span>
                     </div>
-                    <div className="mt-2 text-sm text-white/40">{p.note}</div>
+                    <div className="mt-2 text-sm text-gray-400">{p.note}</div>
                     
                     {/* The premium document limit section */}
-                    <div className="mt-8 mb-6 relative rounded-2xl border border-white/5 bg-gradient-to-b from-white/[0.08] to-transparent p-5 overflow-hidden group">
-                      <div className="absolute inset-0 bg-brand/[0.03] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                    <div className="mt-8 mb-6 relative rounded-2xl border border-gray-200 bg-gradient-to-b from-gray-50 to-white p-5 overflow-hidden group">
+                      <div className="absolute inset-0 bg-brand/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                       
                       <div className="relative z-10 flex items-center gap-4">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)] group-hover:ring-brand/30 group-hover:bg-brand/10 transition-colors duration-500">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-gray-200 shadow-sm group-hover:ring-brand/40 group-hover:bg-brand/10 transition-colors duration-500">
                           <svg className="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                           </svg>
                         </div>
                         <div>
                           <div className="flex items-end gap-1.5 leading-none">
-                            <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-white to-white/60 tracking-tight">{p.limit.split(' ')[0]}</span>
+                            <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-gray-900 to-gray-500 tracking-tight">{p.limit.split(' ')[0]}</span>
                             <span className="text-[11px] pb-1 font-bold uppercase tracking-widest text-brand mb-[2px]">Docs</span>
                           </div>
-                          <div className="mt-1 text-[11px] font-medium text-white/40 uppercase tracking-wider">Incluidos al año</div>
+                          <div className="mt-1 text-[11px] font-medium text-gray-400 uppercase tracking-wider">Incluidos al año</div>
                         </div>
                       </div>
                     </div>
 
-                    <ul className="mt-4 flex-1 space-y-4 text-sm text-white/70">
+                    <ul className="mt-4 flex-1 space-y-4 text-sm text-gray-600">
                       {p.features.map((f) => (
                         <li key={f} className="flex items-start gap-3">
                           <div className="mt-0.5 rounded-full bg-brand/20 p-0.5">
@@ -493,7 +530,7 @@ export default function Home() {
                       ))}
                     </ul>
 
-                    <div className="mt-8 pt-4 border-t border-white/5">
+                    <div className="mt-8 pt-4 border-t border-gray-100">
                       <MagneticButton
                         href="#contacto"
                         variant={p.highlight ? "primary" : "secondary"}
@@ -515,12 +552,12 @@ export default function Home() {
           <FadeIn>
             <div className="flex items-end justify-between gap-6">
               <div>
-                <div className="text-xs font-semibold text-white/60">Beneficios</div>
+                <div className="text-xs font-semibold text-gray-500">Beneficios</div>
                 <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
                   Factura, cobra y sigue
                 </h2>
               </div>
-              <div className="hidden text-sm text-white/60 md:block">
+              <div className="hidden text-sm text-gray-500 md:block">
                 Menos admin. Más negocio.
               </div>
             </div>
@@ -529,42 +566,42 @@ export default function Home() {
           <div className="mt-10 grid gap-4 md:grid-cols-2">
             {benefits.map((b, idx) => (
               <FadeIn key={b.title} delay={0.04 * idx}>
-                <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                   <div className="flex items-center gap-3">
                     <div className="grid h-10 w-10 place-items-center rounded-2xl bg-brand/12 text-brand ring-1 ring-brand/20">
                       {b.icon}
                     </div>
-                    <div className="text-sm font-semibold">{b.title}</div>
+                    <div className="text-sm font-semibold text-gray-900">{b.title}</div>
                   </div>
-                  <p className="mt-2 text-sm leading-6 text-white/70">{b.description}</p>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">{b.description}</p>
                 </div>
               </FadeIn>
             ))}
           </div>
         </section>
 
-        <section id="funciones" className="border-y border-white/10 bg-white/[0.03]">
+        <section id="funciones" className="border-y border-gray-200 bg-gray-50">
           <div className="mx-auto w-full max-w-6xl px-5 py-16">
             <FadeIn>
-              <div className="text-xs font-semibold text-white/60">Funciones</div>
+              <div className="text-xs font-semibold text-gray-500">Funciones</div>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
                 Lo esencial para facturar
               </h2>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-white/70">
+              <p className="mt-3 max-w-2xl text-sm leading-6 text-gray-600">
                 Sistema web de facturación con clientes y productos, reportes y control de
                 cobros. Listo para operar y cumplir con el SRI.
               </p>
-              <ul className="mt-4 space-y-2 text-sm text-white/70">
+              <ul className="mt-4 space-y-2 text-sm text-gray-600">
                 <li className="flex items-start gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                   Control de impuestos, totales y datos fiscales.
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                   Emisión y autorización de comprobantes en línea.
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                  <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                   Reportes para ventas, cobros y estados.
                 </li>
               </ul>
@@ -716,14 +753,14 @@ export default function Home() {
                 },
               ].map((f, idx) => (
                 <FadeIn key={f.title} delay={0.03 * idx}>
-                  <div className="rounded-2xl border border-white/10 bg-black/40 p-6">
+                  <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
                     <div className="flex items-center gap-3">
                       <div className="grid h-10 w-10 place-items-center rounded-2xl bg-brand/12 text-brand ring-1 ring-brand/20">
                         {f.icon}
                       </div>
-                      <div className="text-sm font-semibold">{f.title}</div>
+                      <div className="text-sm font-semibold text-gray-900">{f.title}</div>
                     </div>
-                    <p className="mt-2 text-sm leading-6 text-white/70">{f.text}</p>
+                    <p className="mt-2 text-sm leading-6 text-gray-600">{f.text}</p>
                   </div>
                 </FadeIn>
               ))}
@@ -733,7 +770,7 @@ export default function Home() {
 
         <section id="sri-2026" className="mx-auto w-full max-w-6xl px-5 py-16">
           <FadeIn>
-            <div className="text-xs font-semibold text-white/60">Actualización SRI</div>
+            <div className="text-xs font-semibold text-gray-500">Actualización SRI</div>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
               Cambios clave 2026
             </h2>
@@ -741,13 +778,13 @@ export default function Home() {
 
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             <FadeIn delay={0.05}>
-              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
-                <div className="text-sm font-semibold">Transmisión inmediata</div>
-                <p className="mt-2 text-sm leading-6 text-white/70">
+              <div className="flex h-full flex-col rounded-3xl border border-gray-200 bg-gray-50 p-6">
+                <div className="text-sm font-semibold text-gray-900">Transmisión inmediata</div>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
                   Sin plazo extra: se envía al momento de emitir para autorización de
                   comprobantes electrónicos SRI.
                 </p>
-                <p className="mt-3 text-sm leading-6 text-white/70">
+                <p className="mt-3 text-sm leading-6 text-gray-600">
                   Antes existía un margen para transmitir después de generar el
                   comprobante. Desde 2026, ese margen se elimina y la emisión debe ir
                   acompañada de envío inmediato del XML.
@@ -755,12 +792,12 @@ export default function Home() {
               </div>
             </FadeIn>
             <FadeIn delay={0.1} className="h-full">
-              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
-                <div className="text-sm font-semibold">Consumidor final</div>
-                <p className="mt-2 text-sm leading-6 text-white/70">
+              <div className="flex h-full flex-col rounded-3xl border border-gray-200 bg-gray-50 p-6">
+                <div className="text-sm font-semibold text-gray-900">Consumidor final</div>
+                <p className="mt-2 text-sm leading-6 text-gray-600">
                   No se anula ni se hace nota de crédito.
                 </p>
-                <p className="mt-3 text-sm leading-6 text-white/70">
+                <p className="mt-3 text-sm leading-6 text-gray-600">
                   Una vez emitida y transmitida la factura con la leyenda "consumidor
                   final", no procede anulación ni nota de crédito. Por eso es clave
                   validar datos antes de emitir.
@@ -768,19 +805,19 @@ export default function Home() {
               </div>
             </FadeIn>
             <FadeIn delay={0.15} className="h-full">
-              <div className="flex h-full flex-col rounded-3xl border border-white/10 bg-white/5 p-6">
-                <div className="text-sm font-semibold">Impacto operativo</div>
-                <ul className="mt-3 space-y-2 text-sm text-white/70">
+              <div className="flex h-full flex-col rounded-3xl border border-gray-200 bg-gray-50 p-6">
+                <div className="text-sm font-semibold text-gray-900">Impacto operativo</div>
+                <ul className="mt-3 space-y-2 text-sm text-gray-600">
                   <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                     Validación previa para evitar rechazos del SRI.
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                     Envío inmediato del XML y respaldo del RIDE.
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-white/60" />
+                    <span className="mt-2 h-1.5 w-1.5 rounded-full bg-brand" />
                     Control más estricto en consumidor final.
                   </li>
                 </ul>
@@ -789,28 +826,28 @@ export default function Home() {
           </div>
 
           <FadeIn delay={0.2}>
-            <div className="mt-8 rounded-3xl border border-white/10 bg-black/40 p-6">
-              <div className="text-sm font-semibold">Resumen rápido</div>
-              <p className="mt-2 text-sm leading-6 text-white/70">
+            <div className="mt-8 rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+              <div className="text-sm font-semibold text-gray-900">Resumen rápido</div>
+              <p className="mt-2 text-sm leading-6 text-gray-600">
                 Qué implica: emites y transmites de inmediato, evitas anulaciones de
                 consumidor final y mantienes el historial correcto.
               </p>
-              <p className="mt-3 text-sm leading-6 text-white/70">
+              <p className="mt-3 text-sm leading-6 text-gray-600">
                 En la práctica, el sistema debe validar datos, generar XML y enviar al SRI
                 sin demoras. También debe asegurar que el comprobante de consumidor final
                 sea correcto desde el primer intento.
               </p>
-              <div className="mt-4 text-sm text-white/60">
+              <div className="mt-4 text-sm text-gray-500">
                 Para casos especiales, revisa la resolución SRI vigente.
               </div>
             </div>
           </FadeIn>
         </section>
 
-        <section id="faq" className="border-t border-white/10 bg-white/[0.03]">
+        <section id="faq" className="border-t border-gray-200 bg-gray-50">
           <div className="mx-auto w-full max-w-6xl px-5 py-16">
             <FadeIn>
-              <div className="text-xs font-semibold text-white/60">FAQ</div>
+              <div className="text-xs font-semibold text-gray-500">FAQ</div>
               <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
                 Preguntas frecuentes
               </h2>
@@ -824,21 +861,21 @@ export default function Home() {
 
         <section id="contacto" className="mx-auto w-full max-w-6xl px-5 py-16">
           <FadeIn>
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8 md:p-10">
+            <div className="rounded-3xl border border-gray-200 bg-gradient-to-br from-green-50 to-white p-8 md:p-10 shadow-sm">
               <div className="grid gap-8 md:grid-cols-2 md:items-center">
                 <div>
-                  <div className="text-xs font-semibold text-white/60">Contacto</div>
+                  <div className="text-xs font-semibold text-gray-500">Contacto</div>
                   <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
                     ¿Listo para facturar sin errores?
                   </h2>
-                  <p className="mt-3 text-sm leading-6 text-white/70">
+                  <p className="mt-3 text-sm leading-6 text-gray-600">
                     Deja tus datos y vemos tu caso.
                   </p>
                 </div>
 
-                <div className="rounded-2xl bg-black/40 p-5 ring-1 ring-white/10">
-                  <div className="text-sm font-semibold">Opción rápida</div>
-                  <p className="mt-2 text-sm leading-6 text-white/70">
+                <div className="rounded-2xl bg-white p-5 ring-1 ring-gray-200 shadow-sm">
+                  <div className="text-sm font-semibold text-gray-900">Opción rápida</div>
+                  <p className="mt-2 text-sm leading-6 text-gray-600">
                     Déjanos tus datos y te contactamos con planes, requisitos y una demo.
                   </p>
 
@@ -854,20 +891,20 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-white/10">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-5 py-10 text-sm text-white/60 md:flex-row md:items-center md:justify-between">
+      <footer className="border-t border-gray-200 bg-gray-50">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-5 py-10 text-sm text-gray-500 md:flex-row md:items-center md:justify-between">
           <div>© {new Date().getFullYear()} Catalina Facturador</div>
           <div className="flex gap-4">
-            <a className="hover:text-white" href="/que-es-facturacion-electronica">
+            <a className="hover:text-gray-900" href="/que-es-facturacion-electronica">
               Qué es
             </a>
-            <a className="hover:text-white" href="/cumplimiento-sri">
+            <a className="hover:text-gray-900" href="/cumplimiento-sri">
               Cumplimiento SRI
             </a>
-            <a className="hover:text-white" href="#beneficios">
+            <a className="hover:text-gray-900" href="#beneficios">
               Beneficios
             </a>
-            <a className="hover:text-white" href="#contacto">
+            <a className="hover:text-gray-900" href="#contacto">
               Contacto
             </a>
           </div>

@@ -98,7 +98,7 @@ export function InvoiceSpeedShowcase() {
         if (badge) timeline.to(badge, { filter: 'brightness(1.25)', duration: 0.18, yoyo: true, repeat: 1 }, 1.62);
         timeline.to(
           rootEl,
-          { boxShadow: '0 0 0 1px rgba(34,197,94,0.35), 0 40px 90px rgba(0,0,0,0.6)', duration: 0.35, ease: 'power2.out', yoyo: true, repeat: 1 },
+          { boxShadow: '0 0 0 1px rgba(22,163,74,0.3), 0 20px 50px rgba(22,163,74,0.12)', duration: 0.35, ease: 'power2.out', yoyo: true, repeat: 1 },
           1.62,
         );
 
@@ -148,11 +148,11 @@ export function InvoiceSpeedShowcase() {
   }, []);
 
   return (
-    <div ref={rootRef} className="relative overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-5">
+    <div ref={rootRef} className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       {/* Decorative glows — ocultos en móvil (ver globals.css) */}
       <div className="mobile-glow pointer-events-none absolute inset-0">
-        <div className="absolute -top-24 left-1/2 h-48 w-[28rem] -translate-x-1/2 rounded-full bg-brand/15 blur-3xl" />
-        <div className="absolute -bottom-24 left-1/2 h-48 w-[28rem] -translate-x-1/2 rounded-full bg-white/5 blur-3xl" />
+        <div className="absolute -top-24 left-1/2 h-48 w-[28rem] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
+        <div className="absolute -bottom-24 left-1/2 h-48 w-[28rem] -translate-x-1/2 rounded-full bg-green-50 blur-3xl" />
       </div>
 
       {/* Speed streaks */}
@@ -169,8 +169,8 @@ export function InvoiceSpeedShowcase() {
 
       <div className="relative flex items-center justify-between gap-4">
         <div>
-          <div className="text-xs font-semibold text-white/60">Demo</div>
-          <div className="mt-1 text-sm font-semibold">Factura en segundos</div>
+          <div className="text-xs font-semibold text-gray-500">Demo</div>
+          <div className="mt-1 text-sm font-semibold text-gray-900">Factura en segundos</div>
         </div>
 
         <div
@@ -181,11 +181,11 @@ export function InvoiceSpeedShowcase() {
         </div>
       </div>
 
-      <div className="relative mt-4 rounded-2xl bg-black/60 p-4 ring-1 ring-white/10">
+      <div className="relative mt-4 rounded-2xl bg-gray-50 p-4 ring-1 ring-gray-200">
         <div className="flex items-center justify-between">
-          <div className="text-xs font-semibold text-white/60">Emitir documento</div>
+          <div className="text-xs font-semibold text-gray-500">Emitir documento</div>
           <div className="flex items-center gap-2">
-            <div className="h-2 w-24 overflow-hidden rounded-full bg-white/10">
+            <div className="h-2 w-24 overflow-hidden rounded-full bg-gray-200">
               <div data-progress className="h-full w-full rounded-full bg-brand" />
             </div>
             <div
@@ -199,35 +199,35 @@ export function InvoiceSpeedShowcase() {
         </div>
 
         <div className="mt-4 grid gap-3">
-          <div data-step className="rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
-            <div className="text-[11px] font-semibold text-white/60">Cliente</div>
-            <div data-reveal className="mt-2 rounded-lg bg-black/40 px-3 py-2 text-sm">
+          <div data-step className="rounded-xl bg-gray-100 p-3 ring-1 ring-gray-200">
+            <div className="text-[11px] font-semibold text-gray-500">Cliente</div>
+            <div data-reveal className="mt-2 rounded-lg bg-white px-3 py-2 text-sm text-gray-900 border border-gray-200">
               Ferretería Los Andes
             </div>
           </div>
 
-          <div data-step className="rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
-            <div className="text-[11px] font-semibold text-white/60">Items</div>
-            <div data-reveal className="mt-2 rounded-lg bg-black/40 px-3 py-2 text-sm">
+          <div data-step className="rounded-xl bg-gray-100 p-3 ring-1 ring-gray-200">
+            <div className="text-[11px] font-semibold text-gray-500">Items</div>
+            <div data-reveal className="mt-2 rounded-lg bg-white px-3 py-2 text-sm text-gray-900 border border-gray-200">
               2× Servicios • 1× Producto
             </div>
           </div>
 
-          <div data-step className="rounded-xl bg-white/5 p-3 ring-1 ring-white/10">
+          <div data-step className="rounded-xl bg-gray-100 p-3 ring-1 ring-gray-200">
             <div className="flex items-center justify-between">
-              <div className="text-[11px] font-semibold text-white/60">Total</div>
-              <div className="text-[11px] font-semibold text-white/60">USD</div>
+              <div className="text-[11px] font-semibold text-gray-500">Total</div>
+              <div className="text-[11px] font-semibold text-gray-500">USD</div>
             </div>
-            <div data-reveal className="mt-2 flex items-baseline justify-between rounded-lg bg-black/40 px-3 py-2">
-              <div className="text-sm text-white/70">Total a cobrar</div>
-              <div className="text-lg font-semibold">$
+            <div data-reveal className="mt-2 flex items-baseline justify-between rounded-lg bg-white px-3 py-2 border border-gray-200">
+              <div className="text-sm text-gray-600">Total a cobrar</div>
+              <div className="text-lg font-semibold text-gray-900">$
                 <span data-total>0.00</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 text-xs text-white/55">
+        <div className="mt-4 text-xs text-gray-500">
           Sin pasos innecesarios: elegir cliente → items → emitir.
         </div>
       </div>
