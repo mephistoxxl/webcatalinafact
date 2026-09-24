@@ -22,10 +22,13 @@ export default function CumplimientoSRI() {
       <header className="border-b border-gray-200 bg-white/90 backdrop-blur shadow-sm">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5">
           <a href="/" className="flex items-center gap-3 font-semibold tracking-tight">
-            <BrandLogo className="h-14 w-auto" width={380} height={88} />
+            <BrandLogo className="h-20 w-auto" width={500} height={114} />
             <span className="sr-only">Catalina Facturador</span>
           </a>
           <nav className="hidden items-center gap-6 text-sm text-gray-600 md:flex">
+            <a className="hover:text-gray-900" href="/">
+              Inicio
+            </a>
             <a className="hover:text-gray-900" href="/que-es-facturacion-electronica">
               Qué es
             </a>

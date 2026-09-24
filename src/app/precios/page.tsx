@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 const pricing = [
   {
     name: "Plan Micro",
-    price: "$9,99",
-    note: "+ IVA · anual",
-    limit: "65 documentos",
+    prices: { oneYear: "$9.99", threeYears: "$24.99", fiveYears: "$39.99" },
+    note: "por período",
+    limit: "50 facturas",
     features: [
       "Clientes y productos",
       "PDF + envío por email",
@@ -31,9 +31,9 @@ const pricing = [
   },
   {
     name: "Plan Básico",
-    price: "$14,99",
-    note: "+ IVA · anual",
-    limit: "100 documentos",
+    prices: { oneYear: "$19.99", threeYears: "$49.99", fiveYears: "$79.99" },
+    note: "por período",
+    limit: "150 facturas",
     features: [
       "Clientes y productos",
       "PDF + envío por email",
@@ -43,9 +43,9 @@ const pricing = [
   },
   {
     name: "Plan Emprendedor",
-    price: "$25,99",
-    note: "+ IVA · anual",
-    limit: "150 documentos",
+    prices: { oneYear: "$45.00", threeYears: "$119.99", fiveYears: "$189.99" },
+    note: "por período",
+    limit: "Ilimitado",
     features: [
       "Clientes y productos",
       "PDF + envío por email",
@@ -63,10 +63,13 @@ export default function Precios() {
       <header className="border-b border-gray-200 bg-white/90 backdrop-blur shadow-sm">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5">
           <a href="/" className="flex items-center gap-3 font-semibold tracking-tight">
-            <BrandLogo className="h-14 w-auto" width={380} height={88} />
+            <BrandLogo className="h-20 w-auto" width={500} height={114} />
             <span className="sr-only">Catalina Facturador</span>
           </a>
           <nav className="hidden items-center gap-6 text-sm text-gray-600 md:flex">
+            <a className="hover:text-gray-900" href="/">
+              Inicio
+            </a>
             <a className="hover:text-gray-900" href="/que-es-facturacion-electronica">
               Qué es
             </a>
@@ -120,11 +123,11 @@ export default function Precios() {
               )}
 
               <div className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{p.name}</div>
-              <div className="mt-3 flex items-baseline gap-1">
-                <span className="text-4xl font-semibold tracking-tight text-gray-900">{p.price.split(',')[0]}</span>
-                <span className="text-xl font-semibold text-gray-500">,{p.price.split(',')[1]}</span>
+              <div className="mt-3 rounded-xl border border-gray-200 bg-white px-4 py-3">
+                <div className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">1 año</div>
+                <div className="mt-1 text-3xl font-bold tracking-tight text-gray-900">{p.prices.oneYear}</div>
               </div>
-              <div className="mt-1 text-sm text-gray-400">{p.note}</div>
+              <div className="mt-1 text-sm text-gray-400">{p.note} · renovación anual</div>
 
               <div className="mt-6 mb-2 rounded-2xl border border-gray-200 bg-gradient-to-b from-gray-50 to-white p-4 text-center">
                 <div className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-gray-900 to-gray-500">

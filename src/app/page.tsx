@@ -1,46 +1,15 @@
-'use client';
 import dynamic from "next/dynamic";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { BrandLogo } from "@/components/BrandLogo";
-
-// ─── Carga diferida (code-splitting) ─────────────────────────────────────────
-// Estos componentes están below-the-fold. Con dynamic() Next.js los separa en
-// chunks independientes que solo se descargan cuando el usuario llega a ellos.
-
-// GSAP (~70 KB gzip) — solo se carga cuando el componente entra en pantalla
-const InvoiceSpeedShowcase = dynamic(
-  () => import("@/components/gsap/InvoiceSpeedShowcase").then((m) => m.InvoiceSpeedShowcase),
-  {
-    ssr: false, // No hay que renderizar la animación en el servidor
-    loading: () => (
-      <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 p-5 h-[340px] animate-pulse" />
-    ),
-  }
-);
+import { PaymentButton } from "@/components/PaymentButton";
+import { ContactForm } from "@/components/ContactForm";
 
 // FAQ accordion — solo se necesita cuando el usuario llega al final
 const FaqAccordion = dynamic(
   () => import("@/components/FaqAccordion").then((m) => m.FaqAccordion),
   { ssr: true } // Puede SSR para SEO de las preguntas
 );
-
-// Formulario de contacto — último elemento de la página
-const ContactForm = dynamic(
-  () => import("@/components/ContactForm").then((m) => m.ContactForm),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="grid gap-3 animate-pulse">
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="h-10 rounded-xl bg-gray-100" />
-        ))}
-        <div className="h-12 rounded-xl bg-gray-200" />
-      </div>
-    ),
-  }
-);
-
 
 const benefits = [
   {
@@ -178,9 +147,9 @@ const benefits = [
 const pricing = [
   {
     name: "Plan Micro",
-    price: "$9,99",
-    note: "+ IVA · anual",
-    limit: "65 documentos",
+    prices: { oneYear: "$9.99", threeYears: "$24.99", fiveYears: "$39.99" },
+    note: "por período",
+    limit: "50 facturas",
     features: [
       "Clientes y productos",
       "PDF + envío por email",
@@ -190,9 +159,9 @@ const pricing = [
   },
   {
     name: "Plan Básico",
-    price: "$14,99",
-    note: "+ IVA · anual",
-    limit: "100 documentos",
+    prices: { oneYear: "$19.99", threeYears: "$49.99", fiveYears: "$79.99" },
+    note: "por período",
+    limit: "150 facturas",
     features: [
       "Clientes y productos",
       "PDF + envío por email",
@@ -202,9 +171,9 @@ const pricing = [
   },
   {
     name: "Plan Emprendedor",
-    price: "$25,99",
-    note: "+ IVA · anual",
-    limit: "150 documentos",
+    prices: { oneYear: "$45.00", threeYears: "$119.99", fiveYears: "$189.99" },
+    note: "por período",
+    limit: "Ilimitado",
     features: [
       "Clientes y productos",
       "PDF + envío por email",
@@ -253,12 +222,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white text-gray-900">
       <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/90 backdrop-blur shadow-sm">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5 md:py-6">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-5">
           <a href="#" className="flex items-center gap-3 font-semibold tracking-tight">
-            <BrandLogo className="h-16 w-auto md:h-20" width={420} height={96} />
+            <BrandLogo className="h-20 w-auto" width={500} height={114} />
             <span className="sr-only">Catalina Facturador</span>
           </a>
           <nav className="hidden items-center gap-6 text-sm text-gray-600 md:flex">
+            <a className="hover:text-gray-900" href="/">
+              Inicio
+            </a>
             <a className="hover:text-gray-900" href="/que-es-facturacion-electronica">
               Qué es
             </a>
@@ -305,7 +277,7 @@ export default function Home() {
             <div className="absolute -bottom-24 left-1/2 h-72 w-[40rem] -translate-x-1/2 rounded-full bg-brand/10 blur-3xl" />
           </div>
 
-          <div className="mx-auto grid w-full max-w-6xl gap-10 px-5 pb-16 pt-14 md:grid-cols-2 md:items-center md:pb-24 md:pt-20">
+          <div className="mx-auto w-full max-w-6xl px-5 pb-16 pt-14 md:pb-24 md:pt-20">
             <div>
               <FadeIn>
                 <div className="inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-xs font-semibold text-gray-800 ring-1 ring-brand/30 shadow-sm">
@@ -362,28 +334,86 @@ export default function Home() {
               </FadeIn>
             </div>
 
-            <div className="relative">
-              <div className="rounded-3xl border border-gray-200 bg-gray-50 p-6">
-                <InvoiceSpeedShowcase />
-              </div>
+          </div>
+        </section>
 
-              <FadeIn delay={0.22}>
-                <div className="mt-5 flex flex-wrap items-center justify-center gap-2 text-xs text-gray-500 md:justify-start">
-                  <span className="rounded-full bg-gray-100 px-3 py-1 ring-1 ring-gray-200">
-                    Facturas PDF
-                  </span>
-                  <span className="rounded-full bg-gray-100 px-3 py-1 ring-1 ring-gray-200">
-                    Control de pagos
-                  </span>
-                  <span className="rounded-full bg-gray-100 px-3 py-1 ring-1 ring-gray-200">
-                    Reportes
-                  </span>
-                  <span className="rounded-full bg-gray-100 px-3 py-1 ring-1 ring-gray-200">
-                    Multi-usuario
-                  </span>
+        <section id="precios" className="mx-auto w-full max-w-6xl px-5 py-16">
+          <FadeIn>
+            <div className="text-xs font-semibold text-gray-500">Precios</div>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
+              Planes simples. Valor real.
+            </h2>
+          </FadeIn>
+
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {pricing.map((p, idx) => (
+              <FadeIn key={p.name} delay={0.04 * idx}>
+                <div
+                  className={[
+                    "relative flex h-full flex-col overflow-hidden rounded-[2rem] border p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg",
+                    p.highlight
+                      ? "border-brand/50 bg-green-50 ring-2 ring-inset ring-brand/20 shadow-md"
+                      : "border-gray-200 bg-white shadow-sm",
+                  ].join(" ")}
+                >
+                  {p.highlight && (
+                    <>
+                      <div className="mobile-glow absolute -right-20 -top-20 h-40 w-40 rounded-full bg-brand/10 blur-3xl" />
+                      <div className="absolute right-0 top-0 rounded-bl-2xl bg-brand/20 border-b border-l border-brand/30 px-3 py-1 mt-0 mr-0">
+                        <span className="text-[10px] font-bold uppercase tracking-widest text-brand">Popular</span>
+                      </div>
+                    </>
+                  )}
+
+                  <div className="relative z-10 flex flex-col flex-1">
+                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{p.name}</div>
+                    <div className="mt-4 rounded-xl border border-gray-200 bg-white px-4 py-3">
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-gray-400">1 año</div>
+                      <div className="mt-1 text-3xl font-bold tracking-tight text-gray-900">{p.prices.oneYear}</div>
+                    </div>
+                    <div className="mt-2 text-sm text-gray-400">{p.note} · renovación anual</div>
+
+                    <div className="mt-8 mb-6 relative rounded-2xl border border-gray-200 bg-gradient-to-b from-gray-50 to-white p-5 overflow-hidden group">
+                      <div className="absolute inset-0 bg-brand/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      <div className="relative z-10 flex items-center gap-4">
+                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-gray-200 shadow-sm group-hover:ring-brand/40 group-hover:bg-brand/10 transition-colors duration-500">
+                          <svg className="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <div>
+                          <div className="flex items-end gap-1.5 leading-none">
+                            <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-gray-900 to-gray-500 tracking-tight">{p.limit.split(' ')[0]}</span>
+                            <span className="text-[11px] pb-1 font-bold uppercase tracking-widest text-brand mb-[2px]">Docs</span>
+                          </div>
+                          <div className="mt-1 text-[11px] font-medium text-gray-400 uppercase tracking-wider">Incluidos al año</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <ul className="mt-4 flex-1 space-y-4 text-sm text-gray-600">
+                      {p.features.map((f) => (
+                        <li key={f} className="flex items-start gap-3">
+                          <div className="mt-0.5 rounded-full bg-brand/20 p-0.5">
+                            <svg className="h-3 w-3 shrink-0 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                            </svg>
+                          </div>
+                          <span className="leading-tight">{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-8 pt-4 border-t border-gray-100">
+                      <PaymentButton
+                        plan={p.name}
+                        variant={p.highlight ? "primary" : "secondary"}
+                      />
+                    </div>
+                  </div>
                 </div>
               </FadeIn>
-            </div>
+            ))}
           </div>
         </section>
 
@@ -459,93 +489,6 @@ export default function Home() {
               </div>
             </FadeIn>
           </div>
-        </section>
-
-        <section id="precios" className="mx-auto w-full max-w-6xl px-5 py-16">
-          <FadeIn>
-            <div className="text-xs font-semibold text-gray-500">Precios</div>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight md:text-3xl">
-              Planes simples. Valor real.
-            </h2>
-          </FadeIn>
-
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {pricing.map((p, idx) => (
-              <FadeIn key={p.name} delay={0.04 * idx}>
-                <div
-                  className={[
-                    "relative flex h-full flex-col overflow-hidden rounded-[2rem] border p-8 transition-all duration-500 hover:-translate-y-1 hover:shadow-lg",
-                    p.highlight
-                      ? "border-brand/50 bg-green-50 ring-2 ring-inset ring-brand/20 shadow-md"
-                      : "border-gray-200 bg-white shadow-sm",
-                  ].join(" ")}
-                >
-                  {p.highlight && (
-                    <>
-                      <div className="mobile-glow absolute -right-20 -top-20 h-40 w-40 rounded-full bg-brand/10 blur-3xl" />
-                      <div className="absolute right-0 top-0 rounded-bl-2xl bg-brand/20 border-b border-l border-brand/30 px-3 py-1 mt-0 mr-0">
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-brand">Popular</span>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="relative z-10 flex flex-col flex-1">
-                    <div className="text-xs font-semibold text-gray-500 uppercase tracking-widest">{p.name}</div>
-                    <div className="mt-4 flex items-baseline gap-1">
-                      <span className="text-5xl font-semibold tracking-tighter text-gray-900">{p.price.split(',')[0]}</span>
-                      <span className="text-2xl font-semibold text-gray-500">,{p.price.split(',')[1]}</span>
-                    </div>
-                    <div className="mt-2 text-sm text-gray-400">{p.note}</div>
-                    
-                    {/* The premium document limit section */}
-                    <div className="mt-8 mb-6 relative rounded-2xl border border-gray-200 bg-gradient-to-b from-gray-50 to-white p-5 overflow-hidden group">
-                      <div className="absolute inset-0 bg-brand/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                      
-                      <div className="relative z-10 flex items-center gap-4">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-gray-200 shadow-sm group-hover:ring-brand/40 group-hover:bg-brand/10 transition-colors duration-500">
-                          <svg className="h-6 w-6 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <div className="flex items-end gap-1.5 leading-none">
-                            <span className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-br from-gray-900 to-gray-500 tracking-tight">{p.limit.split(' ')[0]}</span>
-                            <span className="text-[11px] pb-1 font-bold uppercase tracking-widest text-brand mb-[2px]">Docs</span>
-                          </div>
-                          <div className="mt-1 text-[11px] font-medium text-gray-400 uppercase tracking-wider">Incluidos al año</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <ul className="mt-4 flex-1 space-y-4 text-sm text-gray-600">
-                      {p.features.map((f) => (
-                        <li key={f} className="flex items-start gap-3">
-                          <div className="mt-0.5 rounded-full bg-brand/20 p-0.5">
-                            <svg className="h-3 w-3 shrink-0 text-brand" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                            </svg>
-                          </div>
-                          <span className="leading-tight">{f}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-8 pt-4 border-t border-gray-100">
-                      <MagneticButton
-                        href="#contacto"
-                        variant={p.highlight ? "primary" : "secondary"}
-                        className="w-full justify-center"
-                      >
-                        Elegir plan
-                      </MagneticButton>
-                    </div>
-                  </div>
-                </div>
-              </FadeIn>
-            ))}
-          </div>
-
-
         </section>
 
         <section id="beneficios" className="mx-auto w-full max-w-6xl px-5 py-16">

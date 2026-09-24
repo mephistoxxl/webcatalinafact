@@ -94,13 +94,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <head>
-        {/* Preconnect a los CDN de fuentes para reducir latencia TLS */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* DNS-prefetch como fallback para navegadores que no soportan preconnect */}
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
